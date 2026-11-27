@@ -1,0 +1,53 @@
+@startuml usecase
+' 智能日报生成器 用例图（阶段一 v1）
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+
+actor "团队成员\n(王然/咸哲/王峻羽)" as Member
+actor "组长" as Leader
+actor "配置管理员" as Admin
+
+rectangle "智能日报生成器（v1）" {
+  usecase "UC1 采集GitHub提交" as UC1
+  usecase "UC2 采集飞书任务流转" as UC2
+  usecase "UC3 采集群消息与@提及" as UC3
+  usecase "UC4 生成个人日报条目" as UC4
+  usecase "UC5 协同成果自动归属" as UC5
+  usecase "UC6 编排团队日报" as UC6
+  usecase "UC7 推送邮件日报" as UC7
+  usecase "UC8 推送飞书机器人" as UC8
+  usecase "UC9 查询日报历史" as UC9
+  usecase "UC10 配置成员清单" as UC10
+  usecase "UC11 注入环境变量凭证" as UC11
+  usecase "UC12 一键运行日报流程" as UC12
+}
+
+' 采集用例
+UC4 ..> UC1 : <<include>>
+UC4 ..> UC2 : <<include>>
+UC4 ..> UC3 : <<include>>
+UC5 ..> UC4 : <<include>>
+UC6 ..> UC5 : <<include>>
+UC6 ..> UC4 : <<include>>
+
+' 主流程编排
+UC12 ..> UC1 : <<include>>
+UC12 ..> UC2 : <<include>>
+UC12 ..> UC3 : <<include>>
+UC12 ..> UC6 : <<include>>
+UC12 ..> UC7 : <<include>>
+UC12 ..> UC8 : <<include>>
+
+' 扩展分支
+UC7 ..> UC9 : <<extend>>\n历史日报随邮件附送
+UC8 ..> UC9 : <<extend>>\n历史日报随消息附送
+
+Member --> UC4
+Member --> UC12
+Leader --> UC6
+Leader --> UC9
+Admin --> UC10
+Admin --> UC11
+Admin --> UC12
+@enduml

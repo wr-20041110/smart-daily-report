@@ -1,0 +1,139 @@
+@startuml class
+' 智能日报生成器 类图（阶段一 v1，省略 getter/setter 与私有辅助方法）
+skinparam classAttributeIconSize 0
+
+package "共享基础层" {
+  class Member {
+    +name: str
+    +github_username: str
+    +feishu_open_id: str
+    +email: str
+  }
+  class RawEvent {
+    +source: str
+    +event_type: str
+    +ref: str
+    +author: str
+    +occurred_at: datetime
+    +title: str
+    +url: str
+    +collaborators: list[str]
+    +payload: dict
+  }
+  class Settings {
+    +members: list[Member]
+    +github_repo: str
+    +github_token: str | None
+    +feishu_app_id: str | None
+    +smtp_host: str | None
+    +mock: bool
+    +from_env() : Settings
+  }
+  class Storage {
+    +init_db(path) : Connection
+    +save_raw_events(conn, events)
+    +save_reports(conn, entries, team)
+    +load_team_report(conn, day) : str | None
+  }
+}
+
+package "采集层" {
+  abstract class BaseCollector {
+    +name: str
+    +{abstract} collect(day: date) : list[RawEvent]
+    #_retry(request_fn)
+  }
+  class GitHubCollector {
+    -repo: str
+    -token: str | None
+    -client: httpx.Client
+    +collect(day) : list[RawEvent]
+  }
+  class FeishuTaskCollector {
+    +collect(day) : list[RawEvent]
+  }
+  class FeishuMessageCollector {
+    +collect(day) : list[RawEvent]
+  }
+  class MockCollector {
+    +data_key: str
+    +collect(day) : list[RawEvent]
+  }
+  BaseCollector <|-- GitHubCollector
+  BaseCollector <|-- FeishuTaskCollector
+  BaseCollector <|-- FeishuMessageCollector
+  BaseCollector <|-- MockCollector
+}
+
+package "生成层" {
+  class DailyReportEntry {
+    +date: date
+    +member_name: str
+    +category: str
+    +items: list[str]
+    +raw_refs: list[str]
+  }
+  class TeamReport {
+    +date: date
+    +entries: list[DailyReportEntry]
+    +members_without_events: list[str]
+    +missing_sources: list[str]
+    +generated_at: datetime
+    +to_markdown() : str
+  }
+  class ReportGenerator {
+    +{static} generate_member_reports(events, members, day) : list[DailyReportEntry]
+    +{static} build_team_report(entries, members, missing, day) : TeamReport
+    -{static} _map_account(members, account) : str | None
+  }
+}
+
+package "推送层" {
+  class PushResult {
+    +channel: str
+    +ok: bool
+    +mocked: bool
+    +detail: str
+  }
+  abstract class BasePusher {
+    +channel: str
+    +{abstract} push(team: TeamReport) : PushResult
+  }
+  class EmailPusher {
+    +push(team) : PushResult
+  }
+  class FeishuBotPusher {
+    +push(team) : PushResult
+  }
+  BasePusher <|-- EmailPusher
+  BasePusher <|-- FeishuBotPusher
+}
+
+package "主编排入口" {
+  class PipelineResult {
+    +day: date
+    +collected: dict[str, int]
+    +missing_sources: list[str]
+    +entry_count: int
+    +push_results: list[PushResult]
+    +mocked: bool
+    +elapsed_seconds: float
+  }
+  class Orchestrator {
+    +run_pipeline(day: date, settings: Settings) : PipelineResult
+    -_choose_collectors(settings) : list[BaseCollector]
+    -_choose_pushers(settings) : list[BasePusher]
+  }
+}
+
+ReportGenerator ..> RawEvent
+ReportGenerator ..> DailyReportEntry
+ReportGenerator ..> TeamReport
+TeamReport *-- DailyReportEntry
+Orchestrator ..> BaseCollector
+Orchestrator ..> ReportGenerator
+Orchestrator ..> Storage
+Orchestrator ..> BasePusher
+Orchestrator ..> PipelineResult
+Settings *-- Member
+@enduml

@@ -1,0 +1,49 @@
+@startuml er
+' 智能日报生成器 ER 图（SQLite 三表）
+hide circle
+skinparam linetype ortho
+
+entity "raw_events\n原始事件" as raw {
+  * id : INTEGER PK
+  --
+  * source : TEXT
+  * event_type : TEXT
+  * ref : TEXT
+  * author : TEXT
+  * occurred_at : TEXT
+  * title : TEXT
+  url : TEXT
+  collaborators : TEXT
+  payload : TEXT
+  * collected_at : TEXT
+  --
+  UNIQUE(source, ref)
+}
+
+entity "daily_reports\n个人日报条目" as daily {
+  * id : INTEGER PK
+  --
+  * report_date : TEXT
+  * member_name : TEXT
+  * category : TEXT
+  * content : TEXT
+  raw_refs : TEXT
+  * created_at : TEXT
+  --
+  UNIQUE(report_date, member_name, category)
+}
+
+entity "team_reports\n团队日报" as team {
+  * id : INTEGER PK
+  --
+  * report_date : TEXT
+  * content : TEXT
+  missing_sources : TEXT
+  * generated_at : TEXT
+  --
+  UNIQUE(report_date)
+}
+
+raw ||..o{ daily : "聚合生成\n(raw_refs 引用 source+ref)"
+daily }o..|| team : "汇总编排\n(同日多成员条目)"
+@enduml

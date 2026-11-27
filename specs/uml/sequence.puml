@@ -1,0 +1,50 @@
+@startuml sequence
+' 智能日报生成器 主编排时序图（一键运行日报流程）
+actor "配置管理员" as Admin
+participant "Orchestrator\n主编排" as O
+participant "BaseCollector\n采集层(×3)" as C
+participant "ReportGenerator\n生成层" as G
+participant "Storage\nSQLite" as S
+participant "BasePusher\n推送层(×2)" as P
+participant "团队成员" as M
+
+Admin -> O : python -m daily_report_v1 --date D
+activate O
+O -> O : 加载 Settings（env 凭证 + config.json 成员清单）
+loop 每个数据源（github/feishu_task/feishu_message）
+  O -> C : collect(D)
+  activate C
+  alt 凭证齐全
+    C -> C : HTTP 调用外部平台（重试3次退避）
+  else 凭证缺失
+    C -> C : 使用内置 mock 数据集
+  end
+  C --> O : list[RawEvent]
+  deactivate C
+end
+O -> G : generate_member_reports(events, members, D)
+activate G
+G --> O : list[DailyReportEntry]
+deactivate G
+O -> G : build_team_report(entries, members, missing, D)
+activate G
+G --> O : TeamReport
+deactivate G
+O -> S : save_raw_events + save_reports
+activate S
+S --> O : 落库完成（幂等）
+deactivate S
+loop 每个推送通道（email/feishu）
+  O -> P : push(team_report)
+  activate P
+  alt 凭证齐全
+    P -> M : 发送日报
+  else 凭证缺失
+    P -> P : mock 推送留痕
+  end
+  P --> O : PushResult
+  deactivate P
+end
+O --> Admin : PipelineResult（各层状态与耗时）
+deactivate O
+@enduml
