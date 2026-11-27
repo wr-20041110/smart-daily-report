@@ -32,9 +32,12 @@
     "group_id": "oc_9b090c9c1c52b836e84be91dad10394f"
   },
   "report": {
-    "sender": "【替换为发件邮箱】",
+    "sender": "1839636091@qq.com",
     "recipients": [
-      "【替换为收件邮箱，可多个】"
+      "1839636091@qq.com",
+      "1300622114@qq.com",
+      "2476650375@qq.com",
+      "20233159@stu.ccut.edu.cn"
     ]
   },
   "db_path": "data/reports.db",
