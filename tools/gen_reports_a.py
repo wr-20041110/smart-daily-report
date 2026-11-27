@@ -185,7 +185,7 @@ def build_requirements() -> str:
         "→（落库）→ SQLite 三表（raw_events / daily_reports / team_reports，ER 图见系统分析报告第 4 章）"
         "→（渲染）→ Markdown 全文 →（推送）→ 邮件/飞书。事件 UTC 存储、本地（Asia/Shanghai）展示。")
     r.h2("5.3 数据规模")
-    r.p("单团队单日约 200 条原始事件、9 条个人条目、1 份团队日报，远小于 SQLite 容量上限（ADR-002）。")
+    r.p("单团队单日约 200 条原始事件、12 条个人条目、1 份团队日报，远小于 SQLite 容量上限（ADR-002）。")
 
     r.h1("第6章 验收标准")
     r.p("验收标准 SC1–SC12（功能/性能/边界三类）逐条定义于 proposal.md 第 5 章，"

@@ -28,7 +28,7 @@ def test_mock_end_to_end(settings):
     assert result.mocked is True
     assert result.collected == {"github": 20, "feishu_task": 15, "feishu_message": 15}
     assert result.missing_sources == []
-    assert result.entry_count == 9  # 3 成员 × (dev + collab + discuss)，每成员每分类 1 条
+    assert result.entry_count == 12  # 4 成员 × (dev + collab + discuss)，每成员每分类 1 条
     assert result.elapsed_seconds >= 0
 
 
@@ -80,4 +80,4 @@ def test_cli_mock_run(settings, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert code == 0
     assert "Mock（内置模拟数据）" in out
-    assert "生成条目：9 条" in out
+    assert "生成条目：12 条" in out

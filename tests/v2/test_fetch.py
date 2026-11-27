@@ -56,13 +56,13 @@ def test_mock_v2_counts_with_attendance():
         "github": 20,
         "feishu_task": 15,
         "feishu_message": 15,
-        "feishu_attendance": 6,
+        "feishu_attendance": 8,
     }
 
 
 def test_fetch_mock_entrypoint():
     events = fetch_mock(DAY, Settings(members=tuple(MEMBERS)))
-    assert len(events) == 56
+    assert len(events) == 58
 
 
 # ---- GitHub ----

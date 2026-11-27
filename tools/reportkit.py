@@ -89,7 +89,7 @@ class Report:
         self.doc.add_paragraph()
         p3 = self.doc.add_paragraph()
         p3.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r3 = p3.add_run(f"项目组：{self.team}\n成员：王然、咸哲、王峻羽\n2026 年 12 月")
+        r3 = p3.add_run(f"项目组：{self.team}\n成员：王然、咸哲、王峻羽、尹博弘\n2026 年 12 月")
         r3.font.size = Pt(14)
         _set_east_asia(r3, "宋体")
         self.doc.add_page_break()

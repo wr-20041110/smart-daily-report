@@ -15,6 +15,7 @@ MEMBERS = [
     Member("王然", "wr-20041110", "ou_wr-20041110", "wr-20041110@example.com"),
     Member("咸哲", "xz0622", "ou_xz0622", "xz0622@example.com"),
     Member("王峻羽", "wjy-jjj", "ou_wjy-jjj", "wjy-jjj@example.com"),
+    Member("尹博弘", "Yin-bo-hong", "ou_yinbohong", "20233159@stu.ccut.edu.cn"),
 ]
 
 

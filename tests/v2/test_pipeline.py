@@ -20,9 +20,9 @@ def broken_fetcher(day, settings):
 def test_mock_end_to_end(settings):
     result = run_pipeline(DAY, settings, push=False)
     assert result.mocked is True
-    assert result.collected == {"mock": 56}  # 50 条 + 6 条考勤（变更单 F12）
+    assert result.collected == {"mock": 58}  # 50 条 + 8 条考勤（变更单 F12，4 成员）
     assert result.missing_sources == ()
-    assert result.entry_count == 9  # 3 成员 × (dev + collab + discuss)
+    assert result.entry_count == 12  # 4 成员 × (dev + collab + discuss)
     assert result.elapsed_seconds >= 0
 
 
@@ -73,7 +73,7 @@ def test_cli_mock_run(settings, monkeypatch, capsys):
     out = capsys.readouterr().out
     assert code == 0
     assert "Mock（内置模拟数据）" in out
-    assert "生成条目：9 条" in out
+    assert "生成条目：12 条" in out
 
 
 def test_attendance_present_in_report(settings):

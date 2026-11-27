@@ -369,14 +369,14 @@ _GH_COMMITS: list[tuple[str, str, list[str], int]] = [
     ("xz0622", "实现 synthesize 条目聚合", [], 5),
     ("xz0622", "为 deliver 添加脱敏断言", [], 2),
     ("xz0622", "修复时区边界回归用例", ["wr-20041110"], 2),  # 协作 v2#3
-    ("xz0622", "梳理 systematic-debugging 根因记录", [], 1),
+    ("Yin-bo-hong", "梳理 systematic-debugging 根因记录", [], 1),
     ("xz0622", "重构 pipeline 为函数组合", [], 4),
-    ("xz0622", "归档第 3 周站会记录", [], 1),
+    ("Yin-bo-hong", "归档第 3 周站会记录", [], 1),
     ("wjy-jjj", "搭建 v2 目录与测试门禁", [], 3),
     ("wjy-jjj", "编写 T207 归属正确率测试", ["xz0622"], 3),  # 协作 v2#4
-    ("wjy-jjj", "修复飞书消息 @ 解析", [], 2),
-    ("wjy-jjj", "为 pipeline 添加降级出报断言", [], 2),
-    ("wjy-jjj", "提交 T211 回归记录初稿", [], 1),
+    ("Yin-bo-hong", "修复飞书消息 @ 解析", [], 2),
+    ("Yin-bo-hong", "为 pipeline 添加降级出报断言", [], 2),
+    ("Yin-bo-hong", "提交 T211 回归记录初稿", [], 1),
 ]
 
 _FS_TASKS: list[tuple[str, str, list[str], str]] = [
@@ -384,17 +384,17 @@ _FS_TASKS: list[tuple[str, str, list[str], str]] = [
     ("ou_wr-20041110", "编写 TDD 红绿循环记录", ["ou_xz0622"], "done"),  # 协作 v2#5
     ("ou_wr-20041110", "核对 SC4 标注数据集", [], "done"),
     ("ou_wr-20041110", "整理隐含需求清单 v2", [], "done"),
-    ("ou_wr-20041110", "准备 v2 演示脚本", ["ou_wjy-jjj"], "doing"),  # 协作 v2#6
     ("ou_xz0622", "绘制 v2 架构图", [], "done"),
     ("ou_xz0622", "code-review 互评 T204 提交", [], "done"),
-    ("ou_xz0622", "red-team 评审 rules.py", ["ou_wr-20041110"], "done"),  # 协作 v2#7
+    ("ou_xz0622", "red-team 评审 rules.py", ["ou_wr-20041110"], "done"),  # 协作 v2#6
     ("ou_xz0622", "梳理变更单影响面", [], "done"),
-    ("ou_xz0622", "设计考勤字段映射", ["ou_wjy-jjj"], "done"),  # 协作 v2#8
     ("ou_wjy-jjj", "搭建 ruff 静态门禁", [], "done"),
     ("ou_wjy-jjj", "配置 coverage 阈值", [], "done"),
     ("ou_wjy-jjj", "实现 store 三表结构", [], "done"),
-    ("ou_wjy-jjj", "编写回归测试骨架", [], "doing"),
-    ("ou_wjy-jjj", "归档 AI 使用日志", [], "done"),
+    ("ou_wjy-jjj", "编写回归测试骨架", ["ou_yinbohong"], "doing"),  # 协作 v2#7
+    ("ou_yinbohong", "设计考勤字段映射", ["ou_wjy-jjj"], "done"),  # 协作 v2#8
+    ("ou_yinbohong", "归档 AI 使用日志", [], "done"),
+    ("ou_yinbohong", "准备 v2 演示脚本", [], "doing"),
 ]
 
 _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
@@ -402,17 +402,17 @@ _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
     ("ou_wr-20041110", "@咸哲 T-201 骨架帮我评审", ["ou_xz0622"], "T-201"),  # 协作 v2#9
     ("ou_wr-20041110", "红绿循环记录已更新", [], None),
     ("ou_wr-20041110", "规则引擎还有 2 条用例要补", [], None),
-    ("ou_wr-20041110", "@王峻羽 T-207 正确率测试一起写", ["ou_wjy-jjj"], "T-207"),  # 协作 v2#10
     ("ou_xz0622", "T204 失败测试已提交", [], None),
     ("ou_xz0622", "systematic-debugging 记录模板放群文件了", [], None),
-    ("ou_xz0622", "@王然 rules.py 评审意见 3 条", ["ou_wr-20041110"], "T-207"),  # 协作 v2#11
+    ("ou_xz0622", "@王然 rules.py 评审意见 3 条", ["ou_wr-20041110"], "T-207"),  # 协作 v2#10
     ("ou_xz0622", "晚上 7 点半过一遍演示", [], None),
-    ("ou_xz0622", "考勤变更单影响面已梳理", [], None),
     ("ou_wjy-jjj", "store 幂等测试通过", [], None),
-    ("ou_wjy-jjj", "@咸哲 T-209 脱敏断言过了吗", ["ou_xz0622"], "T-209"),  # 协作 v2#12
+    ("ou_wjy-jjj", "@咸哲 T-209 脱敏断言过了吗", ["ou_xz0622"], "T-209"),  # 协作 v2#11
     ("ou_wjy-jjj", "ruff 0 告警了", [], None),
     ("ou_wjy-jjj", "CI 门禁跑通", [], None),
-    ("ou_wjy-jjj", "变更涟漪回归我来牵头", [], None),
+    ("ou_yinbohong", "考勤变更单影响面已梳理", [], None),
+    ("ou_yinbohong", "@王峻羽 T-213 回归一起看", ["ou_wjy-jjj"], "T-213"),  # 协作 v2#12
+    ("ou_yinbohong", "变更涟漪回归我来牵头", [], None),
 ]
 
 _ATTENDANCE: list[tuple[str, str, str]] = [
@@ -422,6 +422,8 @@ _ATTENDANCE: list[tuple[str, str, str]] = [
     ("ou_xz0622", "17:59", "pm_out"),
     ("ou_wjy-jjj", "09:10", "am_in"),
     ("ou_wjy-jjj", "18:12", "pm_out"),
+    ("ou_yinbohong", "09:15", "am_in"),
+    ("ou_yinbohong", "18:20", "pm_out"),
 ]
 
 #: 12 条标注协作事件（ref -> 应归属成员姓名），SC4 验收基准（v2 数据集）
@@ -431,13 +433,13 @@ EXPECTED_ATTRIBUTION_V2: dict[str, list[str]] = {
     "v2-gh-012": ["咸哲", "王然"],
     "v2-gh-017": ["王峻羽", "咸哲"],
     "v2-ft-002": ["王然", "咸哲"],
-    "v2-ft-005": ["王然", "王峻羽"],
-    "v2-ft-008": ["咸哲", "王然"],
-    "v2-ft-010": ["咸哲", "王峻羽"],
+    "v2-ft-007": ["咸哲", "王然"],
+    "v2-ft-012": ["王峻羽", "尹博弘"],
+    "v2-ft-013": ["尹博弘", "王峻羽"],
     "v2-fm-002": ["王然", "咸哲"],
-    "v2-fm-005": ["王然", "王峻羽"],
-    "v2-fm-008": ["咸哲", "王然"],
-    "v2-fm-012": ["王峻羽", "咸哲"],
+    "v2-fm-007": ["咸哲", "王然"],
+    "v2-fm-010": ["王峻羽", "咸哲"],
+    "v2-fm-014": ["尹博弘", "王峻羽"],
 }
 
 

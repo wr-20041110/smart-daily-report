@@ -111,7 +111,7 @@
 - **交付物**：fetch.py（attendance 部分，注册表项 `feishu_attendance`）+ tests/v2/test_fetch_attendance.py
 - **验收标准**：
   - 采集当日打卡记录（上午/下午首末次），归入 `dev` 分类"考勤"子条目
-  - mock 考勤事件集 6 条（3 成员 × 2 次打卡）
+  - mock 考勤事件集 8 条（4 成员 × 2 次打卡）
 - **依赖**：T212
 - **预估**：3h
 

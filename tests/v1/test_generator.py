@@ -12,6 +12,7 @@ MEMBERS = [
     Member("王然", "wr-20041110", "ou_wr-20041110", "a@x.com"),
     Member("咸哲", "xz0622", "ou_xz0622", "b@x.com"),
     Member("王峻羽", "wjy-jjj", "ou_wjy-jjj", "c@x.com"),
+    Member("尹博弘", "Yin-bo-hong", "ou_yinbohong", "20233159@stu.ccut.edu.cn"),
 ]
 
 
@@ -109,6 +110,7 @@ def test_member_without_events_listed():
     team = build_team_report(generate_member_reports([ev()], MEMBERS, DAY), MEMBERS, [], DAY)
     assert "咸哲" in team.members_without_events
     assert "王峻羽" in team.members_without_events
+    assert "尹博弘" in team.members_without_events
 
 
 def test_unknown_account_goes_to_unmapped():

@@ -45,7 +45,7 @@
 | 采集-GitHub | collectors/github.py | 调 GitHub API 拉取当日提交并归一化为 RawEvent，含请求计数与退避重试 |
 | 采集-飞书任务 | collectors/feishu.py（任务部分） | 调飞书开放平台拉取任务流转记录，含协作人字段 |
 | 采集-飞书消息 | collectors/feishu.py（消息部分） | 拉取团队群当日消息，解析 @提及 |
-| 采集-Mock | collectors/mock_data.py | 内置 3 名成员 × 3 数据源的模拟事件集（含 12 条标注协作事件，供归属正确率验收） |
+| 采集-Mock | collectors/mock_data.py | 内置 4 名成员 × 3 数据源的模拟事件集（含 12 条标注协作事件，供归属正确率验收） |
 | 生成 | generators/report_generator.py | 事件→个人条目聚合、协同归属规则、团队日报编排与模板排版 |
 | 推送-邮件 | pushers/email_pusher.py | SMTP 发送团队日报（凭证缺失时 mock 留痕） |
 | 推送-飞书 | pushers/feishu_pusher.py | 飞书机器人发送团队日报（凭证缺失时 mock 留痕） |
@@ -160,7 +160,7 @@ class GitHubCollector(BaseCollector):
 class FeishuTaskCollector(BaseCollector): ...
 class FeishuMessageCollector(BaseCollector): ...
 class MockCollector(BaseCollector):
-    """内置模拟数据源；data_key 指定场景（'standard'），共 3 成员 × 3 源 ≈ 60 条事件，含 12 条标注协作事件。"""
+    """内置模拟数据源；data_key 指定场景（'standard'），共 4 成员 × 3 源 ≈ 60 条事件，含 12 条标注协作事件。"""
 ```
 
 ### 4.2 生成层
@@ -282,7 +282,7 @@ CLI：`python -m daily_report_v1 [--date YYYY-MM-DD] [--mock] [--no-push]`
   - A. SQLite：零部署、单文件、事务可靠，标准库自带
   - B. JSON 文件存储：实现最简单，但并发写、查询、去重约束都要手工实现
   - C. MySQL/PostgreSQL：能力强，但课程环境无服务器，部署成本与单团队场景不匹配
-- **决策**：选 A。数据规模（日 ~200 事件、3 成员日报）远小于 SQLite 上限。
+- **决策**：选 A。数据规模（日 ~200 事件、4 成员日报）远小于 SQLite 上限。
 - **理由**：`UNIQUE` 约束天然支持事件去重与幂等重跑；单文件便于随仓库演示与备份；标准库满足课程"SQLite（标准库 sqlite3 即可）"约束。否决 JSON 存储：按日期查询与 (source,ref) 唯一性都需要手写，等于重造数据库。
 
 ### ADR-003 凭证一律环境变量注入，config.json 只存非敏感配置

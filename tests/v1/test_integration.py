@@ -17,7 +17,7 @@ def test_full_pipeline_sc1_sc3_sc5_sc7(settings):
     conn = init_db(settings.db_path)
     md = load_team_report(conn, DAY)
     assert md is not None
-    for name in ("王然", "咸哲", "王峻羽"):
+    for name in ("王然", "咸哲", "王峻羽", "尹博弘"):
         assert f"## {name}" in md
     for label in ("开发", "协作", "讨论"):
         assert f"### {label}" in md

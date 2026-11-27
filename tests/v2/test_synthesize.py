@@ -96,7 +96,7 @@ def test_attendance_line_at_dev_top():
 def test_member_without_events_listed():
     entries = build_entries([ev("github")], [], MEMBERS, DAY)
     team = make_team_report(entries, MEMBERS, [], DAY, mocked=False)
-    assert set(team.members_without_events) == {"咸哲", "王峻羽"}
+    assert set(team.members_without_events) == {"咸哲", "王峻羽", "尹博弘"}
 
 
 def test_render_contains_attendance_source_line():

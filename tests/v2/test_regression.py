@@ -17,13 +17,13 @@ def test_full_regression_sc_checks(settings):
     conn = open_db(settings.db_path)
     md = load_team_report(conn, DAY)
     assert md is not None
-    for name in ("王然", "咸哲", "王峻羽"):
+    for name in ("王然", "咸哲", "王峻羽", "尹博弘"):
         assert f"## {name}" in md
     for label in ("开发", "协作", "讨论"):
         assert f"### {label}" in md
 
     # 变更涟漪 F12：考勤行出现在每位成员日报（T214 验收）
-    assert md.count("考勤｜") == 3
+    assert md.count("考勤｜") == 4
 
     # 可追溯：每条个人条目携带 raw_refs
     rows = conn.execute("SELECT raw_refs FROM daily_reports").fetchall()
