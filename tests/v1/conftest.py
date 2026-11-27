@@ -13,7 +13,7 @@ DAY = date(2026, 11, 24)
 
 MEMBERS = [
     Member("王然", "wr-20041110", "ou_wr-20041110", "wr-20041110@example.com"),
-    Member("咸哲", "XianZhe727", "ou_XianZhe727", "XianZhe727@example.com"),
+    Member("咸哲", "xz0622", "ou_xz0622", "xz0622@example.com"),
     Member("王峻羽", "wjy-jjj", "ou_wjy-jjj", "wjy-jjj@example.com"),
 ]
 

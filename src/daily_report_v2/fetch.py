@@ -358,22 +358,22 @@ def _tenant_token(settings, session: httpx.Client | None) -> str:
 
 _GH_COMMITS: list[tuple[str, str, list[str], int]] = [
     ("wr-20041110", "编写 T201 任务骨架与门禁脚本", [], 3),
-    ("wr-20041110", "为规则引擎添加 R1 失败测试", ["XianZhe727"], 2),  # 协作 v2#1
+    ("wr-20041110", "为规则引擎添加 R1 失败测试", ["xz0622"], 2),  # 协作 v2#1
     ("wr-20041110", "整理红绿循环记录模板", [], 1),
     ("wr-20041110", "修复 store 幂等重跑断言", [], 2),
     ("wr-20041110", "registry 注册考勤采集器", ["wjy-jjj"], 4),  # 协作 v2#2
     ("wr-20041110", "重构 fetch 重试装饰器", [], 3),
     ("wr-20041110", "补充 code-review 检查清单", [], 1),
     ("wr-20041110", "清理 pytest 临时目录", [], 2),
-    ("XianZhe727", "编写 T204 GitHub 采集失败测试", [], 4),
-    ("XianZhe727", "实现 synthesize 条目聚合", [], 5),
-    ("XianZhe727", "为 deliver 添加脱敏断言", [], 2),
-    ("XianZhe727", "修复时区边界回归用例", ["wr-20041110"], 2),  # 协作 v2#3
-    ("XianZhe727", "梳理 systematic-debugging 根因记录", [], 1),
-    ("XianZhe727", "重构 pipeline 为函数组合", [], 4),
-    ("XianZhe727", "归档第 3 周站会记录", [], 1),
+    ("xz0622", "编写 T204 GitHub 采集失败测试", [], 4),
+    ("xz0622", "实现 synthesize 条目聚合", [], 5),
+    ("xz0622", "为 deliver 添加脱敏断言", [], 2),
+    ("xz0622", "修复时区边界回归用例", ["wr-20041110"], 2),  # 协作 v2#3
+    ("xz0622", "梳理 systematic-debugging 根因记录", [], 1),
+    ("xz0622", "重构 pipeline 为函数组合", [], 4),
+    ("xz0622", "归档第 3 周站会记录", [], 1),
     ("wjy-jjj", "搭建 v2 目录与测试门禁", [], 3),
-    ("wjy-jjj", "编写 T207 归属正确率测试", ["XianZhe727"], 3),  # 协作 v2#4
+    ("wjy-jjj", "编写 T207 归属正确率测试", ["xz0622"], 3),  # 协作 v2#4
     ("wjy-jjj", "修复飞书消息 @ 解析", [], 2),
     ("wjy-jjj", "为 pipeline 添加降级出报断言", [], 2),
     ("wjy-jjj", "提交 T211 回归记录初稿", [], 1),
@@ -381,15 +381,15 @@ _GH_COMMITS: list[tuple[str, str, list[str], int]] = [
 
 _FS_TASKS: list[tuple[str, str, list[str], str]] = [
     ("ou_wr-20041110", "review tasks-v2.md 任务粒度", [], "done"),
-    ("ou_wr-20041110", "编写 TDD 红绿循环记录", ["ou_XianZhe727"], "done"),  # 协作 v2#5
+    ("ou_wr-20041110", "编写 TDD 红绿循环记录", ["ou_xz0622"], "done"),  # 协作 v2#5
     ("ou_wr-20041110", "核对 SC4 标注数据集", [], "done"),
     ("ou_wr-20041110", "整理隐含需求清单 v2", [], "done"),
     ("ou_wr-20041110", "准备 v2 演示脚本", ["ou_wjy-jjj"], "doing"),  # 协作 v2#6
-    ("ou_XianZhe727", "绘制 v2 架构图", [], "done"),
-    ("ou_XianZhe727", "code-review 互评 T204 提交", [], "done"),
-    ("ou_XianZhe727", "red-team 评审 rules.py", ["ou_wr-20041110"], "done"),  # 协作 v2#7
-    ("ou_XianZhe727", "梳理变更单影响面", [], "done"),
-    ("ou_XianZhe727", "设计考勤字段映射", ["ou_wjy-jjj"], "done"),  # 协作 v2#8
+    ("ou_xz0622", "绘制 v2 架构图", [], "done"),
+    ("ou_xz0622", "code-review 互评 T204 提交", [], "done"),
+    ("ou_xz0622", "red-team 评审 rules.py", ["ou_wr-20041110"], "done"),  # 协作 v2#7
+    ("ou_xz0622", "梳理变更单影响面", [], "done"),
+    ("ou_xz0622", "设计考勤字段映射", ["ou_wjy-jjj"], "done"),  # 协作 v2#8
     ("ou_wjy-jjj", "搭建 ruff 静态门禁", [], "done"),
     ("ou_wjy-jjj", "配置 coverage 阈值", [], "done"),
     ("ou_wjy-jjj", "实现 store 三表结构", [], "done"),
@@ -399,17 +399,17 @@ _FS_TASKS: list[tuple[str, str, list[str], str]] = [
 
 _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
     ("ou_wr-20041110", "晨会：今天按 executing-plans 逐任务推进", [], None),
-    ("ou_wr-20041110", "@咸哲 T-201 骨架帮我评审", ["ou_XianZhe727"], "T-201"),  # 协作 v2#9
+    ("ou_wr-20041110", "@咸哲 T-201 骨架帮我评审", ["ou_xz0622"], "T-201"),  # 协作 v2#9
     ("ou_wr-20041110", "红绿循环记录已更新", [], None),
     ("ou_wr-20041110", "规则引擎还有 2 条用例要补", [], None),
     ("ou_wr-20041110", "@王峻羽 T-207 正确率测试一起写", ["ou_wjy-jjj"], "T-207"),  # 协作 v2#10
-    ("ou_XianZhe727", "T204 失败测试已提交", [], None),
-    ("ou_XianZhe727", "systematic-debugging 记录模板放群文件了", [], None),
-    ("ou_XianZhe727", "@王然 rules.py 评审意见 3 条", ["ou_wr-20041110"], "T-207"),  # 协作 v2#11
-    ("ou_XianZhe727", "晚上 7 点半过一遍演示", [], None),
-    ("ou_XianZhe727", "考勤变更单影响面已梳理", [], None),
+    ("ou_xz0622", "T204 失败测试已提交", [], None),
+    ("ou_xz0622", "systematic-debugging 记录模板放群文件了", [], None),
+    ("ou_xz0622", "@王然 rules.py 评审意见 3 条", ["ou_wr-20041110"], "T-207"),  # 协作 v2#11
+    ("ou_xz0622", "晚上 7 点半过一遍演示", [], None),
+    ("ou_xz0622", "考勤变更单影响面已梳理", [], None),
     ("ou_wjy-jjj", "store 幂等测试通过", [], None),
-    ("ou_wjy-jjj", "@咸哲 T-209 脱敏断言过了吗", ["ou_XianZhe727"], "T-209"),  # 协作 v2#12
+    ("ou_wjy-jjj", "@咸哲 T-209 脱敏断言过了吗", ["ou_xz0622"], "T-209"),  # 协作 v2#12
     ("ou_wjy-jjj", "ruff 0 告警了", [], None),
     ("ou_wjy-jjj", "CI 门禁跑通", [], None),
     ("ou_wjy-jjj", "变更涟漪回归我来牵头", [], None),
@@ -418,8 +418,8 @@ _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
 _ATTENDANCE: list[tuple[str, str, str]] = [
     ("ou_wr-20041110", "09:02", "am_in"),
     ("ou_wr-20041110", "18:05", "pm_out"),
-    ("ou_XianZhe727", "08:58", "am_in"),
-    ("ou_XianZhe727", "17:59", "pm_out"),
+    ("ou_xz0622", "08:58", "am_in"),
+    ("ou_xz0622", "17:59", "pm_out"),
     ("ou_wjy-jjj", "09:10", "am_in"),
     ("ou_wjy-jjj", "18:12", "pm_out"),
 ]

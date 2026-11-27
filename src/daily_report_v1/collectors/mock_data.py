@@ -6,7 +6,7 @@
 
 平台账号（占位，替换为真实账号后重跑即可）：
   王然   github=wr-20041110      feishu=ou_wr-20041110
-  咸哲   github=XianZhe727      feishu=ou_XianZhe727
+  咸哲   github=xz0622      feishu=ou_xz0622
   王峻羽 github=wjy-jjj    feishu=ou_wjy-jjj
 """
 
@@ -25,22 +25,22 @@ MOCK_COUNTS = {"github": 20, "feishu_task": 15, "feishu_message": 15}
 # (作者 GitHub 用户名, 标题, 共同作者, 变更文件数)
 _COMMITS: list[tuple[str, str, list[str], int]] = [
     ("wr-20041110", "修复日报生成模块归属去重问题", [], 4),
-    ("wr-20041110", "新增飞书任务采集器重试逻辑", ["XianZhe727"], 6),  # 协作#1
+    ("wr-20041110", "新增飞书任务采集器重试逻辑", ["xz0622"], 6),  # 协作#1
     ("wr-20041110", "更新团队成员配置清单", [], 2),
     ("wr-20041110", "整理 README 与快速开始文档", [], 1),
     ("wr-20041110", "为存储层补充幂等重跑测试", ["wjy-jjj"], 3),  # 协作#2
     ("wr-20041110", "优化协同归属规则 R3 的解析", [], 5),
     ("wr-20041110", "修正时区换算边界用例", [], 2),
     ("wr-20041110", "重构推送层日志脱敏", [], 4),
-    ("XianZhe727", "完成 design.md 接口契约评审", [], 2),
-    ("XianZhe727", "新增 httpx 连接池配置", [], 3),
-    ("XianZhe727", "实现 GitHub 采集日期窗口", [], 5),
-    ("XianZhe727", "修复 mock 数据集时区问题", ["wr-20041110"], 2),  # 协作#3
-    ("XianZhe727", "补充 ER 图与表结构说明", [], 1),
-    ("XianZhe727", "调整重试退避策略为 1s/2s/4s", [], 2),
-    ("XianZhe727", "为飞书任务采集增加字段映射测试", [], 3),
+    ("xz0622", "完成 design.md 接口契约评审", [], 2),
+    ("xz0622", "新增 httpx 连接池配置", [], 3),
+    ("xz0622", "实现 GitHub 采集日期窗口", [], 5),
+    ("xz0622", "修复 mock 数据集时区问题", ["wr-20041110"], 2),  # 协作#3
+    ("xz0622", "补充 ER 图与表结构说明", [], 1),
+    ("xz0622", "调整重试退避策略为 1s/2s/4s", [], 2),
+    ("xz0622", "为飞书任务采集增加字段映射测试", [], 3),
     ("wjy-jjj", "搭建 pytest 与 coverage 门禁", [], 4),
-    ("wjy-jjj", "实现团队日报 Markdown 模板", ["XianZhe727"], 6),  # 协作#4
+    ("wjy-jjj", "实现团队日报 Markdown 模板", ["xz0622"], 6),  # 协作#4
     ("wjy-jjj", "修复成员映射未知账号处理", [], 2),
     ("wjy-jjj", "增加主流程幂等性检查", [], 3),
     ("wjy-jjj", "提交验收核对记录初稿", [], 1),
@@ -49,15 +49,15 @@ _COMMITS: list[tuple[str, str, list[str], int]] = [
 # (经办人 open_id, 标题, 协作人 open_id 列表, 状态)
 _TASKS: list[tuple[str, str, list[str], str]] = [
     ("ou_wr-20041110", "评审 proposal.md 范围条目", [], "done"),
-    ("ou_wr-20041110", "编写需求澄清问答记录", ["ou_XianZhe727"], "done"),  # 协作#5
+    ("ou_wr-20041110", "编写需求澄清问答记录", ["ou_xz0622"], "done"),  # 协作#5
     ("ou_wr-20041110", "核对成功标准可度量性", [], "done"),
     ("ou_wr-20041110", "整理隐含需求清单", [], "done"),
     ("ou_wr-20041110", "准备阶段评审会演示脚本", ["ou_wjy-jjj"], "doing"),  # 协作#6
-    ("ou_XianZhe727", "绘制用例图与泳道图", [], "done"),
-    ("ou_XianZhe727", "撰写 ADR-001/002 初稿", [], "done"),
-    ("ou_XianZhe727", "红队评审 design.md", ["ou_wr-20041110"], "done"),  # 协作#7
-    ("ou_XianZhe727", "梳理非功能约束清单", [], "done"),
-    ("ou_XianZhe727", "设计 SQLite 表结构", ["ou_wjy-jjj"], "done"),  # 协作#8
+    ("ou_xz0622", "绘制用例图与泳道图", [], "done"),
+    ("ou_xz0622", "撰写 ADR-001/002 初稿", [], "done"),
+    ("ou_xz0622", "红队评审 design.md", ["ou_wr-20041110"], "done"),  # 协作#7
+    ("ou_xz0622", "梳理非功能约束清单", [], "done"),
+    ("ou_xz0622", "设计 SQLite 表结构", ["ou_wjy-jjj"], "done"),  # 协作#8
     ("ou_wjy-jjj", "搭建仓库目录与 git 规范", [], "done"),
     ("ou_wjy-jjj", "配置 ruff 静态扫描", [], "done"),
     ("ou_wjy-jjj", "实现存储层 init_db", [], "done"),
@@ -68,17 +68,17 @@ _TASKS: list[tuple[str, str, list[str], str]] = [
 # (发言者 open_id, 消息摘要, @提及 open_id 列表, 关联任务 ID 或 None)
 _MESSAGES: list[tuple[str, str, list[str], str | None]] = [
     ("ou_wr-20041110", "晨会同步：今天先过 proposal 范围", [], None),
-    ("ou_wr-20041110", "@咸哲 T-101 的接口契约帮我看看", ["ou_XianZhe727"], "T-101"),  # 协作#9
+    ("ou_wr-20041110", "@咸哲 T-101 的接口契约帮我看看", ["ou_xz0622"], "T-101"),  # 协作#9
     ("ou_wr-20041110", "调研结论已更新到文档", [], None),
     ("ou_wr-20041110", "mock 数据集还要补 2 条协作事件", [], None),
     ("ou_wr-20041110", "@王峻羽 T-103 集成测试一起修", ["ou_wjy-jjj"], "T-103"),  # 协作#10
-    ("ou_XianZhe727", "用例图初版已提交", [], None),
-    ("ou_XianZhe727", "红队评审问题清单发群里了", [], None),
-    ("ou_XianZhe727", "@王然 design.md 3.2 表结构已改好", ["ou_wr-20041110"], "T-102"),  # 协作#11
-    ("ou_XianZhe727", "晚上 7 点过一遍演示", [], None),
-    ("ou_XianZhe727", "飞书凭证审核还在等", [], None),
+    ("ou_xz0622", "用例图初版已提交", [], None),
+    ("ou_xz0622", "红队评审问题清单发群里了", [], None),
+    ("ou_xz0622", "@王然 design.md 3.2 表结构已改好", ["ou_wr-20041110"], "T-102"),  # 协作#11
+    ("ou_xz0622", "晚上 7 点过一遍演示", [], None),
+    ("ou_xz0622", "飞书凭证审核还在等", [], None),
     ("ou_wjy-jjj", "数据库幂等测试通过", [], None),
-    ("ou_wjy-jjj", "@咸哲 T-105 时区用例过了吗", ["ou_XianZhe727"], "T-105"),  # 协作#12
+    ("ou_wjy-jjj", "@咸哲 T-105 时区用例过了吗", ["ou_xz0622"], "T-105"),  # 协作#12
     ("ou_wjy-jjj", "tag 和提交规范已整理", [], None),
     ("ou_wjy-jjj", "CI 门禁跑通了", [], None),
     ("ou_wjy-jjj", "明天评审会材料我来整理", [], None),
