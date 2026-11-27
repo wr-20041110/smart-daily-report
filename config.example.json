@@ -5,27 +5,21 @@
   "members": [
     {
       "name": "王然",
-      "github_username": "wr-20041110",
+      "github_username": "wangran",
       "feishu_open_id": "ou_【替换为真实飞书 open_id】",
-      "email": "【替换为真实邮箱】"
+      "email": "【1839636091@qq.com】"
     },
     {
       "name": "咸哲",
-      "github_username": "xz0622",
+      "github_username": "xianzhe",
       "feishu_open_id": "ou_【替换为真实飞书 open_id】",
       "email": "【替换为真实邮箱】"
     },
     {
       "name": "王峻羽",
-      "github_username": "wjy-jjj",
+      "github_username": "wangjunyu",
       "feishu_open_id": "ou_【替换为真实飞书 open_id】",
       "email": "【替换为真实邮箱】"
-    },
-    {
-      "name": "尹博弘",
-      "github_username": "Yin-bo-hong",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
-      "email": "20233159@stu.ccut.edu.cn"
     }
   ],
   "feishu": {
@@ -33,9 +27,7 @@
   },
   "report": {
     "sender": "【替换为发件邮箱】",
-    "recipients": [
-      "【替换为收件邮箱，可多个】"
-    ]
+    "recipients": ["【替换为收件邮箱，可多个】"]
   },
   "db_path": "data/reports.db"
 }
