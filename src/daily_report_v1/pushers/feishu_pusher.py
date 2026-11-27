@@ -113,7 +113,10 @@ class FeishuBotPusher(BasePusher):
             )
             if resp.status_code == 200 and body.get("code") == 0:
                 return PushResult(
-                    channel=self.channel, ok=True, mocked=False, detail="已推送至团队群（应用机器人）"
+                    channel=self.channel,
+                    ok=True,
+                    mocked=False,
+                    detail="已推送至团队群（应用机器人）",
                 )
             return PushResult(
                 channel=self.channel,

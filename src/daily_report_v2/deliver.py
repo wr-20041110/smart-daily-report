@@ -108,7 +108,9 @@ def _deliver_via_webhook(webhook: str, rendered: str, client: httpx.Client | Non
             else {}
         )
         if resp.status_code == 200 and body.get("code", body.get("StatusCode", 0)) == 0:
-            return PushResult(channel="feishu", ok=True, mocked=False, detail="已推送至团队群（webhook）")
+            return PushResult(
+                channel="feishu", ok=True, mocked=False, detail="已推送至团队群（webhook）"
+            )
         return PushResult(
             channel="feishu",
             ok=False,
@@ -156,7 +158,9 @@ def _deliver_via_app_bot(settings, rendered: str, client: httpx.Client | None) -
             else {}
         )
         if resp.status_code == 200 and body.get("code") == 0:
-            return PushResult(channel="feishu", ok=True, mocked=False, detail="已推送至团队群（应用机器人）")
+            return PushResult(
+                channel="feishu", ok=True, mocked=False, detail="已推送至团队群（应用机器人）"
+            )
         return PushResult(
             channel="feishu",
             ok=False,
