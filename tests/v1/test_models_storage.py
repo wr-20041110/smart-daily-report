@@ -19,7 +19,7 @@ def make_event(ref="a1", **kw) -> RawEvent:
         source="github",
         event_type="commit",
         ref=ref,
-        author="wangran",
+        author="wr-20041110",
         occurred_at=datetime(2026, 11, 24, 1, 0, tzinfo=UTC),
         title="测试提交",
     )

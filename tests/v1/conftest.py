@@ -12,7 +12,7 @@ from daily_report_v1.models import Member
 DAY = date(2026, 11, 24)
 
 MEMBERS = [
-    Member("王然", "wangran", "ou_wangran", "wangran@example.com"),
+    Member("王然", "wr-20041110", "ou_wr-20041110", "wr-20041110@example.com"),
     Member("咸哲", "xianzhe", "ou_xianzhe", "xianzhe@example.com"),
     Member("王峻羽", "wangjunyu", "ou_wangjunyu", "wangjunyu@example.com"),
 ]

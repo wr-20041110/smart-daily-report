@@ -17,7 +17,7 @@ from .conftest import DAY, MEMBERS
 
 
 def ev(
-    source, author="wangran", collaborators=(), payload=None, title="t", ref="r1", hour=10
+    source, author="wr-20041110", collaborators=(), payload=None, title="t", ref="r1", hour=10
 ) -> RawEvent:
     return RawEvent(
         source=source,
@@ -36,7 +36,7 @@ def entries_for(entries, name, category):
 
 
 def test_account_mapping_three_ways():
-    assert account_to_name("wangran", MEMBERS) == "王然"  # GitHub 用户名
+    assert account_to_name("wr-20041110", MEMBERS) == "王然"  # GitHub 用户名
     assert account_to_name("ou_xianzhe", MEMBERS) == "咸哲"  # 飞书 open_id
     assert account_to_name("王峻羽", MEMBERS) == "王峻羽"  # 姓名直配
     assert account_to_name("stranger", MEMBERS) is None
@@ -55,7 +55,7 @@ def test_message_to_discuss():
 def test_r3_message_gets_discuss_and_collab():
     e = ev(
         "feishu_message",
-        author="ou_wangran",
+        author="ou_wr-20041110",
         title="@咸哲 T-201 帮看下",
         collaborators=("ou_xianzhe",),
         payload={"task_id": "T-201"},
@@ -72,7 +72,7 @@ def test_r3_message_gets_discuss_and_collab():
 def test_attendance_line_at_dev_top():
     e1 = ev(
         "feishu_attendance",
-        author="ou_wangran",
+        author="ou_wr-20041110",
         ref="a1",
         hour=9,
         payload={"period": "am_in"},
@@ -80,7 +80,7 @@ def test_attendance_line_at_dev_top():
     )
     e2 = ev(
         "feishu_attendance",
-        author="ou_wangran",
+        author="ou_wr-20041110",
         ref="a2",
         hour=18,
         payload={"period": "pm_out"},

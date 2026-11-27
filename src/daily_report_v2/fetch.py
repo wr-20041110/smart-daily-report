@@ -347,18 +347,18 @@ def _tenant_token(settings, session: httpx.Client | None) -> str:
 # --------------------------------------------------------------------------
 
 _GH_COMMITS: list[tuple[str, str, list[str], int]] = [
-    ("wangran", "编写 T201 任务骨架与门禁脚本", [], 3),
-    ("wangran", "为规则引擎添加 R1 失败测试", ["xianzhe"], 2),  # 协作 v2#1
-    ("wangran", "整理红绿循环记录模板", [], 1),
-    ("wangran", "修复 store 幂等重跑断言", [], 2),
-    ("wangran", "registry 注册考勤采集器", ["wangjunyu"], 4),  # 协作 v2#2
-    ("wangran", "重构 fetch 重试装饰器", [], 3),
-    ("wangran", "补充 code-review 检查清单", [], 1),
-    ("wangran", "清理 pytest 临时目录", [], 2),
+    ("wr-20041110", "编写 T201 任务骨架与门禁脚本", [], 3),
+    ("wr-20041110", "为规则引擎添加 R1 失败测试", ["xianzhe"], 2),  # 协作 v2#1
+    ("wr-20041110", "整理红绿循环记录模板", [], 1),
+    ("wr-20041110", "修复 store 幂等重跑断言", [], 2),
+    ("wr-20041110", "registry 注册考勤采集器", ["wangjunyu"], 4),  # 协作 v2#2
+    ("wr-20041110", "重构 fetch 重试装饰器", [], 3),
+    ("wr-20041110", "补充 code-review 检查清单", [], 1),
+    ("wr-20041110", "清理 pytest 临时目录", [], 2),
     ("xianzhe", "编写 T204 GitHub 采集失败测试", [], 4),
     ("xianzhe", "实现 synthesize 条目聚合", [], 5),
     ("xianzhe", "为 deliver 添加脱敏断言", [], 2),
-    ("xianzhe", "修复时区边界回归用例", ["wangran"], 2),  # 协作 v2#3
+    ("xianzhe", "修复时区边界回归用例", ["wr-20041110"], 2),  # 协作 v2#3
     ("xianzhe", "梳理 systematic-debugging 根因记录", [], 1),
     ("xianzhe", "重构 pipeline 为函数组合", [], 4),
     ("xianzhe", "归档第 3 周站会记录", [], 1),
@@ -370,14 +370,14 @@ _GH_COMMITS: list[tuple[str, str, list[str], int]] = [
 ]
 
 _FS_TASKS: list[tuple[str, str, list[str], str]] = [
-    ("ou_wangran", "review tasks-v2.md 任务粒度", [], "done"),
-    ("ou_wangran", "编写 TDD 红绿循环记录", ["ou_xianzhe"], "done"),  # 协作 v2#5
-    ("ou_wangran", "核对 SC4 标注数据集", [], "done"),
-    ("ou_wangran", "整理隐含需求清单 v2", [], "done"),
-    ("ou_wangran", "准备 v2 演示脚本", ["ou_wangjunyu"], "doing"),  # 协作 v2#6
+    ("ou_wr-20041110", "review tasks-v2.md 任务粒度", [], "done"),
+    ("ou_wr-20041110", "编写 TDD 红绿循环记录", ["ou_xianzhe"], "done"),  # 协作 v2#5
+    ("ou_wr-20041110", "核对 SC4 标注数据集", [], "done"),
+    ("ou_wr-20041110", "整理隐含需求清单 v2", [], "done"),
+    ("ou_wr-20041110", "准备 v2 演示脚本", ["ou_wangjunyu"], "doing"),  # 协作 v2#6
     ("ou_xianzhe", "绘制 v2 架构图", [], "done"),
     ("ou_xianzhe", "code-review 互评 T204 提交", [], "done"),
-    ("ou_xianzhe", "red-team 评审 rules.py", ["ou_wangran"], "done"),  # 协作 v2#7
+    ("ou_xianzhe", "red-team 评审 rules.py", ["ou_wr-20041110"], "done"),  # 协作 v2#7
     ("ou_xianzhe", "梳理变更单影响面", [], "done"),
     ("ou_xianzhe", "设计考勤字段映射", ["ou_wangjunyu"], "done"),  # 协作 v2#8
     ("ou_wangjunyu", "搭建 ruff 静态门禁", [], "done"),
@@ -388,14 +388,14 @@ _FS_TASKS: list[tuple[str, str, list[str], str]] = [
 ]
 
 _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
-    ("ou_wangran", "晨会：今天按 executing-plans 逐任务推进", [], None),
-    ("ou_wangran", "@咸哲 T-201 骨架帮我评审", ["ou_xianzhe"], "T-201"),  # 协作 v2#9
-    ("ou_wangran", "红绿循环记录已更新", [], None),
-    ("ou_wangran", "规则引擎还有 2 条用例要补", [], None),
-    ("ou_wangran", "@王峻羽 T-207 正确率测试一起写", ["ou_wangjunyu"], "T-207"),  # 协作 v2#10
+    ("ou_wr-20041110", "晨会：今天按 executing-plans 逐任务推进", [], None),
+    ("ou_wr-20041110", "@咸哲 T-201 骨架帮我评审", ["ou_xianzhe"], "T-201"),  # 协作 v2#9
+    ("ou_wr-20041110", "红绿循环记录已更新", [], None),
+    ("ou_wr-20041110", "规则引擎还有 2 条用例要补", [], None),
+    ("ou_wr-20041110", "@王峻羽 T-207 正确率测试一起写", ["ou_wangjunyu"], "T-207"),  # 协作 v2#10
     ("ou_xianzhe", "T204 失败测试已提交", [], None),
     ("ou_xianzhe", "systematic-debugging 记录模板放群文件了", [], None),
-    ("ou_xianzhe", "@王然 rules.py 评审意见 3 条", ["ou_wangran"], "T-207"),  # 协作 v2#11
+    ("ou_xianzhe", "@王然 rules.py 评审意见 3 条", ["ou_wr-20041110"], "T-207"),  # 协作 v2#11
     ("ou_xianzhe", "晚上 7 点半过一遍演示", [], None),
     ("ou_xianzhe", "考勤变更单影响面已梳理", [], None),
     ("ou_wangjunyu", "store 幂等测试通过", [], None),
@@ -406,8 +406,8 @@ _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
 ]
 
 _ATTENDANCE: list[tuple[str, str, str]] = [
-    ("ou_wangran", "09:02", "am_in"),
-    ("ou_wangran", "18:05", "pm_out"),
+    ("ou_wr-20041110", "09:02", "am_in"),
+    ("ou_wr-20041110", "18:05", "pm_out"),
     ("ou_xianzhe", "08:58", "am_in"),
     ("ou_xianzhe", "17:59", "pm_out"),
     ("ou_wangjunyu", "09:10", "am_in"),

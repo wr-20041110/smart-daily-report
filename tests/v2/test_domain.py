@@ -14,7 +14,7 @@ def make_event(**kw) -> RawEvent:
         source="github",
         event_type="commit",
         ref="r1",
-        author="wangran",
+        author="wr-20041110",
         occurred_at=datetime(2026, 12, 1, 2, 0, tzinfo=UTC),
         title="测试提交",
     )
@@ -49,7 +49,7 @@ def base_dict():
         "source": "github",
         "event_type": "commit",
         "ref": "r1",
-        "author": "wangran",
+        "author": "wr-20041110",
         "title": "t",
         "url": "",
         "collaborators": [],

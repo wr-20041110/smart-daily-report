@@ -89,7 +89,7 @@ class FakeClient:
 
 
 def _commit(
-    login="wangran", message="fix: 修复归属去重", sha="abc123", date="2026-11-24T02:00:00Z"
+    login="wr-20041110", message="fix: 修复归属去重", sha="abc123", date="2026-11-24T02:00:00Z"
 ):
     return {
         "sha": sha,
@@ -100,14 +100,14 @@ def _commit(
 
 
 def test_github_requires_token():
-    collector = GitHubCollector("team/repo", None, ["wangran"], session=FakeClient([[]]))
+    collector = GitHubCollector("team/repo", None, ["wr-20041110"], session=FakeClient([[]]))
     with pytest.raises(CredentialsMissingError):
         collector.collect(DAY)
 
 
 def test_github_date_window_and_filter():
     client = FakeClient([[_commit(), _commit(login="outsider")]])
-    collector = GitHubCollector("team/repo", "tok", ["wangran"], session=client)
+    collector = GitHubCollector("team/repo", "tok", ["wr-20041110"], session=client)
     events = collector.collect(DAY)
 
     start, end = day_window(DAY)
@@ -116,15 +116,15 @@ def test_github_date_window_and_filter():
     assert params["until"] == end.isoformat()
     assert params["since"].startswith("2026-11-23T16:00:00")  # Asia/Shanghai 换 UTC
     assert client.calls[0]["headers"]["Authorization"] == "Bearer tok"
-    assert len(events) == 1 and events[0].author == "wangran"  # 非团队成员被过滤
+    assert len(events) == 1 and events[0].author == "wr-20041110"  # 非团队成员被过滤
 
 
 def test_github_coauthor_parsing():
     msg = "fix: 归属去重\n\nCo-authored-by: xianzhe <xianzhe@example.com>"
     client = FakeClient([[_commit(message=msg)]])
-    events = GitHubCollector("team/repo", "tok", ["wangran", "xianzhe"], session=client).collect(
-        DAY
-    )
+    events = GitHubCollector(
+        "team/repo", "tok", ["wr-20041110", "xianzhe"], session=client
+    ).collect(DAY)
     assert events[0].collaborators == ["xianzhe"]
     assert events[0].payload["co_authored"] is True
 
@@ -132,7 +132,7 @@ def test_github_coauthor_parsing():
 def test_github_pagination_and_request_guard():
     full_page = [_commit(sha=f"s{i}") for i in range(100)]
     client = FakeClient([full_page, [_commit(sha="last")]])
-    events = GitHubCollector("team/repo", "tok", ["wangran"], session=client).collect(DAY)
+    events = GitHubCollector("team/repo", "tok", ["wr-20041110"], session=client).collect(DAY)
     assert len(events) == 101  # 两页合并
     assert len(client.calls) == 2
 
@@ -144,7 +144,7 @@ def test_github_request_limit(monkeypatch):
     page = [_commit(sha=f"s{i}") for i in range(100)]
     client = FakeClient([page] * 30)  # 每页都满 → 持续翻页
     with pytest.raises(CollectorError, match="上限"):
-        GitHubCollector("team/repo", "tok", ["wangran"], session=client).collect(DAY)
+        GitHubCollector("team/repo", "tok", ["wr-20041110"], session=client).collect(DAY)
     assert len(client.calls) <= 21
 
 
@@ -153,7 +153,7 @@ def test_github_retry_then_success(monkeypatch):
 
     monkeypatch.setattr(base_mod.time, "sleep", lambda s: None)
     client = FakeClient([[_commit()]], fail_times=2)  # 失败 2 次后成功（3 次重试内）
-    events = GitHubCollector("team/repo", "tok", ["wangran"], session=client).collect(DAY)
+    events = GitHubCollector("team/repo", "tok", ["wr-20041110"], session=client).collect(DAY)
     assert len(events) == 1 and client.fail_times == 0
 
 
@@ -163,7 +163,7 @@ def test_github_retry_exhausted(monkeypatch):
     monkeypatch.setattr(base_mod.time, "sleep", lambda s: None)
     client = FakeClient([[_commit()]], fail_times=99)
     with pytest.raises(CollectorError, match="重试 3 次"):
-        GitHubCollector("team/repo", "tok", ["wangran"], session=client).collect(DAY)
+        GitHubCollector("team/repo", "tok", ["wr-20041110"], session=client).collect(DAY)
 
 
 # ---- 飞书采集器 ----
@@ -175,7 +175,7 @@ class FakeFeishuClient(FakeClient):
         return FakeResponse({"code": 0, "tenant_access_token": "t-token"})
 
 
-def _task_item(guid="g1", assignee="ou_wangran", collabs=None, summary="任务A"):
+def _task_item(guid="g1", assignee="ou_wr-20041110", collabs=None, summary="任务A"):
     return {
         "guid": guid,
         "assignee": assignee,
@@ -186,7 +186,7 @@ def _task_item(guid="g1", assignee="ou_wangran", collabs=None, summary="任务A"
 
 
 def test_feishu_task_requires_credentials():
-    collector = FeishuTaskCollector(None, None, ["ou_wangran"], session=FakeClient([[]]))
+    collector = FeishuTaskCollector(None, None, ["ou_wr-20041110"], session=FakeClient([[]]))
     with pytest.raises(CredentialsMissingError):
         collector.collect(DAY)
 
@@ -195,10 +195,10 @@ def test_feishu_task_mapping():
     client = FakeFeishuClient(
         [{"code": 0, "data": {"items": [_task_item(collabs=["ou_xianzhe"])]}}]
     )
-    collector = FeishuTaskCollector("id", "sec", ["ou_wangran", "ou_xianzhe"], session=client)
+    collector = FeishuTaskCollector("id", "sec", ["ou_wr-20041110", "ou_xianzhe"], session=client)
     events = collector.collect(DAY)
     assert len(events) == 1
-    assert events[0].author == "ou_wangran"  # 经办人→author
+    assert events[0].author == "ou_wr-20041110"  # 经办人→author
     assert events[0].collaborators == ["ou_xianzhe"]  # 协作人→collaborators
     assert events[0].ref == "g1"
     assert client.calls[0]["json"] == {"app_id": "id", "app_secret": "sec"}
@@ -208,7 +208,7 @@ def test_feishu_message_mention_parsing():
     content = '{"text": "@咸哲 T-101 的接口契约帮我看看"}'
     item = {
         "message_id": "m1",
-        "sender": {"id": "ou_wangran"},
+        "sender": {"id": "ou_wr-20041110"},
         "create_time": "1764518400000",
         "body": {"content": content},
     }

@@ -68,7 +68,7 @@ def test_fetch_mock_entrypoint():
 # ---- GitHub ----
 
 
-def _commit(login="wangran", message="feat: 测试提交", sha="abc", date="2026-12-01T02:00:00Z"):
+def _commit(login="wr-20041110", message="feat: 测试提交", sha="abc", date="2026-12-01T02:00:00Z"):
     return {
         "sha": sha,
         "html_url": f"https://github.com/team/repo/commit/{sha}",
@@ -91,7 +91,7 @@ def test_github_window_filter_and_auth():
     assert params["since"] == start.isoformat() and params["until"] == end.isoformat()
     assert params["since"].startswith("2026-11-30T16:00:00")  # Asia/Shanghai → UTC
     assert client.calls[0]["headers"]["Authorization"] == "Bearer tok"
-    assert len(events) == 1 and events[0].author == "wangran"
+    assert len(events) == 1 and events[0].author == "wr-20041110"
 
 
 def test_github_coauthor_parsing():
@@ -133,7 +133,7 @@ def test_github_retry_exhausted(monkeypatch):
 # ---- 飞书 ----
 
 
-def _task(guid="g1", assignee="ou_wangran", collabs=(), summary="任务A"):
+def _task(guid="g1", assignee="ou_wr-20041110", collabs=(), summary="任务A"):
     return {
         "guid": guid,
         "assignee": assignee,
@@ -151,7 +151,7 @@ def test_feishu_requires_credentials():
 def test_feishu_task_mapping():
     client = FakeClient([{"code": 0, "data": {"items": [_task(collabs=("ou_xianzhe",))]}}])
     events = fetch_feishu_task(DAY, feishu_settings(), session=client)
-    assert events[0].author == "ou_wangran"
+    assert events[0].author == "ou_wr-20041110"
     assert events[0].collaborators == ("ou_xianzhe",)
     assert events[0].ref == "g1"
     assert client.calls[0]["json"] == {"app_id": "id", "app_secret": "sec"}
@@ -160,7 +160,7 @@ def test_feishu_task_mapping():
 def test_feishu_message_parsing():
     item = {
         "message_id": "m1",
-        "sender": {"id": "ou_wangran"},
+        "sender": {"id": "ou_wr-20041110"},
         "create_time": "1764550400000",
         "body": {"content": '{"text": "@咸哲 T-201 骨架帮我评审"}'},
     }
@@ -182,7 +182,7 @@ def test_attendance_mapping():
         "data": {
             "user_stats": [
                 {
-                    "user_id": "ou_wangran",
+                    "user_id": "ou_wr-20041110",
                     "records": [{"check_type": "am_in", "check_time": "1764550920000"}],
                 },
                 {

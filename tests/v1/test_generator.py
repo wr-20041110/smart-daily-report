@@ -9,7 +9,7 @@ from daily_report_v1.models import UNMAPPED_NAME, Member, RawEvent
 
 DAY = date(2026, 11, 24)
 MEMBERS = [
-    Member("王然", "wangran", "ou_wangran", "a@x.com"),
+    Member("王然", "wr-20041110", "ou_wr-20041110", "a@x.com"),
     Member("咸哲", "xianzhe", "ou_xianzhe", "b@x.com"),
     Member("王峻羽", "wangjunyu", "ou_wangjunyu", "c@x.com"),
 ]
@@ -20,7 +20,7 @@ def ev(**kw) -> RawEvent:
         source="github",
         event_type="commit",
         ref="r1",
-        author="wangran",
+        author="wr-20041110",
         occurred_at=datetime(2026, 11, 24, 2, 0, tzinfo=UTC),
         title="提交 A",
     )
@@ -55,7 +55,10 @@ def test_r1_coauthored_commit_attributed_to_both():
 
 def test_r2_task_with_collaborators():
     e = ev(
-        source="feishu_task", event_type="task", author="ou_wangran", collaborators=["ou_wangjunyu"]
+        source="feishu_task",
+        event_type="task",
+        author="ou_wr-20041110",
+        collaborators=["ou_wangjunyu"],
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert {n for en in entries if en.category == "collab" for n in [en.member_name]} >= {
@@ -69,7 +72,7 @@ def test_r3_mention_with_task_id():
         source="feishu_message",
         event_type="message",
         ref="m1",
-        author="ou_wangran",
+        author="ou_wr-20041110",
         title="@咸哲 T-101 帮看下接口",
         collaborators=["ou_xianzhe"],
         payload={"task_id": "T-101", "mentions": ["ou_xianzhe"]},
@@ -86,7 +89,7 @@ def test_mention_without_task_id_is_not_collab():
         source="feishu_message",
         event_type="message",
         ref="m2",
-        author="ou_wangran",
+        author="ou_wr-20041110",
         title="@咸哲 在吗",
         collaborators=["ou_xianzhe"],
         payload={"mentions": ["ou_xianzhe"], "task_id": None},
@@ -119,7 +122,7 @@ def test_team_report_ordering_and_markdown():
             ev(
                 source="feishu_message",
                 event_type="message",
-                author="ou_wangran",
+                author="ou_wr-20041110",
                 ref="m9",
                 title="讨论",
             ),

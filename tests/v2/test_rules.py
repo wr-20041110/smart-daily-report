@@ -17,7 +17,9 @@ from daily_report_v2.synthesize import build_entries
 from .conftest import DAY, MEMBERS
 
 
-def ev(source, collaborators=(), payload=None, title="t", author="wangran", ref="r1") -> RawEvent:
+def ev(
+    source, collaborators=(), payload=None, title="t", author="wr-20041110", ref="r1"
+) -> RawEvent:
     return RawEvent(
         source=source,
         event_type="x",
@@ -34,7 +36,7 @@ def test_r1_hits_commit_with_coauthors():
     e = ev("github", collaborators=("xianzhe",))
     attr = rule_coauthored_commit(e)
     assert attr is not None and attr.rule == "R1"
-    assert attr.participants == ("wangran", "xianzhe")
+    assert attr.participants == ("wr-20041110", "xianzhe")
 
 
 def test_r1_misses_plain_commit():
@@ -42,7 +44,7 @@ def test_r1_misses_plain_commit():
 
 
 def test_r2_hits_task_with_collaborators():
-    e = ev("feishu_task", author="ou_wangran", collaborators=("ou_xianzhe",))
+    e = ev("feishu_task", author="ou_wr-20041110", collaborators=("ou_xianzhe",))
     attr = rule_collaborative_task(e)
     assert attr is not None and attr.rule == "R2"
 
