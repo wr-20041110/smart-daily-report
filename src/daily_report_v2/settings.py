@@ -43,7 +43,9 @@ class Settings:
 
     @property
     def is_feishu_ready(self) -> bool:
-        return bool(self.feishu_app_id and self.feishu_app_secret)
+        # 群 ID 含【占位符未替换视为未就绪，保持 mock 模式（演示防护）
+        group_ok = bool(self.feishu_group_id) and "【" not in (self.feishu_group_id or "")
+        return bool(self.feishu_app_id and self.feishu_app_secret) and group_ok
 
     @property
     def is_smtp_ready(self) -> bool:
