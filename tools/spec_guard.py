@@ -87,7 +87,12 @@ def main(argv: list[str]) -> int:
     fail = "--fail" in argv
     all_problems = check1() + check2() + check3()
     print("规范守护自检（spec_guard）")
-    for label, fn in (("1. 采集源与规范一致", check1), ("2. 变更单同步", check2), ("3. 凭证红线", check3)):
+    checks = (
+        ("1. 采集源与规范一致", check1),
+        ("2. 变更单同步", check2),
+        ("3. 凭证红线", check3),
+    )
+    for label, fn in checks:
         problems = fn()
         status = "通过" if not problems else f"{len(problems)} 项不一致"
         print(f"  {label}: [{status}]")
