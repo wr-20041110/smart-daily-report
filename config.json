@@ -1,0 +1,33 @@
+{
+  "team": {
+    "repo": "your-org/smart-daily-report"
+  },
+  "members": [
+    {
+      "name": "王然",
+      "github_username": "wangran",
+      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "email": "【替换为真实邮箱】"
+    },
+    {
+      "name": "咸哲",
+      "github_username": "xianzhe",
+      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "email": "【替换为真实邮箱】"
+    },
+    {
+      "name": "王峻羽",
+      "github_username": "wangjunyu",
+      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "email": "【替换为真实邮箱】"
+    }
+  ],
+  "feishu": {
+    "group_id": "oc_【替换为真实群 ID】"
+  },
+  "report": {
+    "sender": "【替换为发件邮箱】",
+    "recipients": ["【替换为收件邮箱，可多个】"]
+  },
+  "db_path": "data/reports.db"
+}

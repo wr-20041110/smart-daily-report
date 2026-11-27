@@ -1,0 +1,38 @@
+[project]
+name = "smart-daily-report"
+version = "1.0.0"
+description = "智能日报生成器（软件工程职业技能实践课程设计）"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.27",
+    "tzdata>=2024.1; platform_system == 'Windows'",
+]
+
+[project.scripts]
+daily-report = "daily_report_v1.cli:main"
+daily-report-v2 = "daily_report_v2.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "coverage>=7",
+    "ruff>=0.8",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/daily_report_v1", "src/daily_report_v2"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]

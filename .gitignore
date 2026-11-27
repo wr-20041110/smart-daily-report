@@ -1,0 +1,23 @@
+# 凭证与敏感信息（红线：严禁入库）
+.env
+*.env
+
+# 运行时产物
+data/
+*.db
+*.db-journal
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# 编辑器
+.idea/
+.vscode/
