@@ -1,33 +1,45 @@
 {
   "team": {
-    "repo": "your-org/smart-daily-report"
+    "repo": "wr-20041110/smart-daily-report"
   },
   "members": [
     {
       "name": "王然",
-      "github_username": "wangran",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
-      "email": "【1839636091@qq.com】"
+      "github_username": "wr-20041110",
+      "feishu_open_id": "ou_wr-20041110",
+      "email": "1839636091@qq.com"
     },
     {
       "name": "咸哲",
-      "github_username": "xianzhe",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
-      "email": "【替换为真实邮箱】"
+      "github_username": "xz0622",
+      "feishu_open_id": "ou_xz0622",
+      "email": "1300622114@qq.com"
     },
     {
       "name": "王峻羽",
-      "github_username": "wangjunyu",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
-      "email": "【替换为真实邮箱】"
+      "github_username": "wjy-jjj",
+      "feishu_open_id": "ou_wjy-jjj",
+      "email": "2476650375@qq.com"
+    },
+    {
+      "name": "尹博弘",
+      "github_username": "Yin-bo-hong",
+      "feishu_open_id": "ou_yinbohong",
+      "email": "20233159@stu.ccut.edu.cn"
     }
   ],
   "feishu": {
-    "group_id": "oc_【替换为真实群 ID】"
+    "group_id": "oc_9b090c9c1c52b836e84be91dad10394f"
   },
   "report": {
-    "sender": "【替换为发件邮箱】",
-    "recipients": ["【替换为收件邮箱，可多个】"]
+    "sender": "1839636091@qq.com",
+    "recipients": [
+      "1839636091@qq.com",
+      "1300622114@qq.com",
+      "2476650375@qq.com",
+      "20233159@stu.ccut.edu.cn"
+    ]
   },
-  "db_path": "data/reports.db"
+  "db_path": "data/reports.db",
+  "_说明": "feishu_open_id 当前为与 mock 数据集一致的过渡占位值；飞书风控解除拿到真实 open_id 后，替换此文件中的对应值即可"
 }

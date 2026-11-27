@@ -41,5 +41,5 @@
     ]
   },
   "db_path": "data/reports.db",
-  "_说明": "feishu_open_id 当前为与 mock 数据集一致的过渡占位值；申请到真实飞书 open_id 后替换此文件中的对应值即可"
+  "_说明": "feishu_open_id 当前为与 mock 数据集一致的过渡占位值；飞书风控解除拿到真实 open_id 后，替换此文件中的对应值即可"
 }
