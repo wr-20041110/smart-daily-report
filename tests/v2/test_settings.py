@@ -17,7 +17,7 @@ RAW = {
         },
         {
             "name": "咸哲",
-            "github_username": "xianzhe",
+            "github_username": "XianZhe727",
             "feishu_open_id": "ou_2",
             "email": "b@x.com",
         },

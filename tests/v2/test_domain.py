@@ -29,12 +29,12 @@ def test_frozen_immutable():
 
 
 def test_collaborators_are_tuple():
-    ev = make_event(collaborators=("xianzhe",))
+    ev = make_event(collaborators=("XianZhe727",))
     assert isinstance(ev.collaborators, tuple)
 
 
 def test_event_roundtrip_via_functions():
-    ev = make_event(collaborators=("xianzhe", "wangjunyu"), payload={"files": 3})
+    ev = make_event(collaborators=("XianZhe727", "wjy-jjj"), payload={"files": 3})
     back = event_from_dict(event_to_dict(ev))
     assert back == ev
 

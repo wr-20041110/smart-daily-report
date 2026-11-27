@@ -34,7 +34,7 @@ def test_member_name_unique_validation():
 
 
 def test_raw_event_roundtrip():
-    ev = make_event(collaborators=["xianzhe"], payload={"files": 3})
+    ev = make_event(collaborators=["XianZhe727"], payload={"files": 3})
     back = RawEvent.from_dict(ev.to_dict())
     assert back == ev
 

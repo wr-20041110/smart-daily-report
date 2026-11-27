@@ -37,7 +37,7 @@ def entries_for(entries, name, category):
 
 def test_account_mapping_three_ways():
     assert account_to_name("wr-20041110", MEMBERS) == "王然"  # GitHub 用户名
-    assert account_to_name("ou_xianzhe", MEMBERS) == "咸哲"  # 飞书 open_id
+    assert account_to_name("ou_XianZhe727", MEMBERS) == "咸哲"  # 飞书 open_id
     assert account_to_name("王峻羽", MEMBERS) == "王峻羽"  # 姓名直配
     assert account_to_name("stranger", MEMBERS) is None
 
@@ -48,7 +48,7 @@ def test_plain_commit_to_dev():
 
 
 def test_message_to_discuss():
-    entries = build_entries([ev("feishu_message", author="ou_xianzhe")], [], MEMBERS, DAY)
+    entries = build_entries([ev("feishu_message", author="ou_XianZhe727")], [], MEMBERS, DAY)
     assert len(entries_for(entries, "咸哲", "discuss")) == 1
 
 
@@ -57,7 +57,7 @@ def test_r3_message_gets_discuss_and_collab():
         "feishu_message",
         author="ou_wr-20041110",
         title="@咸哲 T-201 帮看下",
-        collaborators=("ou_xianzhe",),
+        collaborators=("ou_XianZhe727",),
         payload={"task_id": "T-201"},
     )
     attrs = apply_rules([e])

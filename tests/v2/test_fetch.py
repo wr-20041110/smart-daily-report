@@ -95,10 +95,10 @@ def test_github_window_filter_and_auth():
 
 
 def test_github_coauthor_parsing():
-    msg = "feat: 规则引擎\n\nCo-authored-by: xianzhe <xianzhe@example.com>"
+    msg = "feat: 规则引擎\n\nCo-authored-by: XianZhe727 <XianZhe727@example.com>"
     client = FakeClient([[_commit(message=msg)]])
     events = fetch_github(DAY, github_settings(), session=client)
-    assert events[0].collaborators == ("xianzhe",)
+    assert events[0].collaborators == ("XianZhe727",)
     assert events[0].payload["co_authored"] is True
 
 
@@ -149,10 +149,10 @@ def test_feishu_requires_credentials():
 
 
 def test_feishu_task_mapping():
-    client = FakeClient([{"code": 0, "data": {"items": [_task(collabs=("ou_xianzhe",))]}}])
+    client = FakeClient([{"code": 0, "data": {"items": [_task(collabs=("ou_XianZhe727",))]}}])
     events = fetch_feishu_task(DAY, feishu_settings(), session=client)
     assert events[0].author == "ou_wr-20041110"
-    assert events[0].collaborators == ("ou_xianzhe",)
+    assert events[0].collaborators == ("ou_XianZhe727",)
     assert events[0].ref == "g1"
     assert client.calls[0]["json"] == {"app_id": "id", "app_secret": "sec"}
 

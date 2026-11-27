@@ -120,12 +120,12 @@ def test_github_date_window_and_filter():
 
 
 def test_github_coauthor_parsing():
-    msg = "fix: 归属去重\n\nCo-authored-by: xianzhe <xianzhe@example.com>"
+    msg = "fix: 归属去重\n\nCo-authored-by: XianZhe727 <XianZhe727@example.com>"
     client = FakeClient([[_commit(message=msg)]])
     events = GitHubCollector(
-        "team/repo", "tok", ["wr-20041110", "xianzhe"], session=client
+        "team/repo", "tok", ["wr-20041110", "XianZhe727"], session=client
     ).collect(DAY)
-    assert events[0].collaborators == ["xianzhe"]
+    assert events[0].collaborators == ["XianZhe727"]
     assert events[0].payload["co_authored"] is True
 
 
@@ -193,13 +193,15 @@ def test_feishu_task_requires_credentials():
 
 def test_feishu_task_mapping():
     client = FakeFeishuClient(
-        [{"code": 0, "data": {"items": [_task_item(collabs=["ou_xianzhe"])]}}]
+        [{"code": 0, "data": {"items": [_task_item(collabs=["ou_XianZhe727"])]}}]
     )
-    collector = FeishuTaskCollector("id", "sec", ["ou_wr-20041110", "ou_xianzhe"], session=client)
+    collector = FeishuTaskCollector(
+        "id", "sec", ["ou_wr-20041110", "ou_XianZhe727"], session=client
+    )
     events = collector.collect(DAY)
     assert len(events) == 1
     assert events[0].author == "ou_wr-20041110"  # 经办人→author
-    assert events[0].collaborators == ["ou_xianzhe"]  # 协作人→collaborators
+    assert events[0].collaborators == ["ou_XianZhe727"]  # 协作人→collaborators
     assert events[0].ref == "g1"
     assert client.calls[0]["json"] == {"app_id": "id", "app_secret": "sec"}
 

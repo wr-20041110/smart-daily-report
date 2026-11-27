@@ -10,8 +10,8 @@ from daily_report_v1.models import UNMAPPED_NAME, Member, RawEvent
 DAY = date(2026, 11, 24)
 MEMBERS = [
     Member("王然", "wr-20041110", "ou_wr-20041110", "a@x.com"),
-    Member("咸哲", "xianzhe", "ou_xianzhe", "b@x.com"),
-    Member("王峻羽", "wangjunyu", "ou_wangjunyu", "c@x.com"),
+    Member("咸哲", "XianZhe727", "ou_XianZhe727", "b@x.com"),
+    Member("王峻羽", "wjy-jjj", "ou_wjy-jjj", "c@x.com"),
 ]
 
 
@@ -39,13 +39,15 @@ def test_plain_commit_goes_to_dev():
 
 
 def test_plain_message_goes_to_discuss():
-    e = ev(source="feishu_message", event_type="message", author="ou_xianzhe", title="大家看下文档")
+    e = ev(
+        source="feishu_message", event_type="message", author="ou_XianZhe727", title="大家看下文档"
+    )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert len(entries_of(entries, "咸哲", "discuss")) == 1
 
 
 def test_r1_coauthored_commit_attributed_to_both():
-    e = ev(ref="c1", collaborators=["xianzhe"])
+    e = ev(ref="c1", collaborators=["XianZhe727"])
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert len(entries_of(entries, "王然", "collab")) == 1
     assert len(entries_of(entries, "咸哲", "collab")) == 1
@@ -58,7 +60,7 @@ def test_r2_task_with_collaborators():
         source="feishu_task",
         event_type="task",
         author="ou_wr-20041110",
-        collaborators=["ou_wangjunyu"],
+        collaborators=["ou_wjy-jjj"],
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert {n for en in entries if en.category == "collab" for n in [en.member_name]} >= {
@@ -74,8 +76,8 @@ def test_r3_mention_with_task_id():
         ref="m1",
         author="ou_wr-20041110",
         title="@咸哲 T-101 帮看下接口",
-        collaborators=["ou_xianzhe"],
-        payload={"task_id": "T-101", "mentions": ["ou_xianzhe"]},
+        collaborators=["ou_XianZhe727"],
+        payload={"task_id": "T-101", "mentions": ["ou_XianZhe727"]},
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     # 发言者同时有 discuss 与 collab（R3）
@@ -91,8 +93,8 @@ def test_mention_without_task_id_is_not_collab():
         ref="m2",
         author="ou_wr-20041110",
         title="@咸哲 在吗",
-        collaborators=["ou_xianzhe"],
-        payload={"mentions": ["ou_xianzhe"], "task_id": None},
+        collaborators=["ou_XianZhe727"],
+        payload={"mentions": ["ou_XianZhe727"], "task_id": None},
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert not entries_of(entries, "咸哲", "collab")

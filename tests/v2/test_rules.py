@@ -33,10 +33,10 @@ def ev(
 
 
 def test_r1_hits_commit_with_coauthors():
-    e = ev("github", collaborators=("xianzhe",))
+    e = ev("github", collaborators=("XianZhe727",))
     attr = rule_coauthored_commit(e)
     assert attr is not None and attr.rule == "R1"
-    assert attr.participants == ("wr-20041110", "xianzhe")
+    assert attr.participants == ("wr-20041110", "XianZhe727")
 
 
 def test_r1_misses_plain_commit():
@@ -44,29 +44,31 @@ def test_r1_misses_plain_commit():
 
 
 def test_r2_hits_task_with_collaborators():
-    e = ev("feishu_task", author="ou_wr-20041110", collaborators=("ou_xianzhe",))
+    e = ev("feishu_task", author="ou_wr-20041110", collaborators=("ou_XianZhe727",))
     attr = rule_collaborative_task(e)
     assert attr is not None and attr.rule == "R2"
 
 
 def test_r3_hits_mention_with_task_id():
-    e = ev("feishu_message", collaborators=("ou_xianzhe",), payload={"task_id": "T-201"})
+    e = ev("feishu_message", collaborators=("ou_XianZhe727",), payload={"task_id": "T-201"})
     attr = rule_mention_with_task(e)
     assert attr is not None and attr.rule == "R3"
 
 
 def test_r3_misses_mention_without_task():
-    e = ev("feishu_message", collaborators=("ou_xianzhe",), payload={"task_id": None})
+    e = ev("feishu_message", collaborators=("ou_XianZhe727",), payload={"task_id": None})
     assert rule_mention_with_task(e) is None
 
 
 def test_r3_falls_back_to_task_id_in_title():
-    e = ev("feishu_message", title="@咸哲 T-201 帮看下", collaborators=("ou_xianzhe",), payload={})
+    e = ev(
+        "feishu_message", title="@咸哲 T-201 帮看下", collaborators=("ou_XianZhe727",), payload={}
+    )
     assert rule_mention_with_task(e) is not None
 
 
 def test_apply_rules_dedup():
-    e = ev("github", collaborators=("xianzhe",), ref="dup")
+    e = ev("github", collaborators=("XianZhe727",), ref="dup")
     attrs = apply_rules([e, e])
     assert len(attrs) == 1
 
