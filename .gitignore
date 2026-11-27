@@ -21,3 +21,6 @@ build/
 # 编辑器
 .idea/
 .vscode/
+
+# Office 临时锁文件
+~$*
