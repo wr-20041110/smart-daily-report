@@ -110,3 +110,53 @@ def test_feishu_webhook_rejected_and_network_error():
     s = Settings(members=tuple(MEMBERS), feishu_bot_webhook="https://hook.example")
     assert not deliver_feishu(make_team(), s, "r", client=FakeHTTP({"code": 10001})).ok
     assert not deliver_feishu(make_team(), s, "r", client=FakeHTTP(fail=True)).ok
+
+
+class FakeAppClient:
+    """应用机器人通道假客户端：第一次 post 换 token，第二次发消息。"""
+
+    def __init__(self, send_ok=True):
+        self.send_ok = send_ok
+        self.calls = []
+
+    def post(self, url, json=None, params=None, headers=None):
+        self.calls.append({"url": url, "json": json, "params": params, "headers": headers})
+        if "tenant_access_token" in url:
+            return httpx.Response(200, json={"code": 0, "tenant_access_token": "t-tok"})
+        return httpx.Response(200, json={"code": 0} if self.send_ok else {"code": 10002})
+
+
+def test_app_bot_fallback_without_webhook():
+    s = Settings(
+        members=tuple(MEMBERS), feishu_app_id="id", feishu_app_secret="sec", feishu_group_id="oc_g"
+    )
+    client = FakeAppClient()
+    result = deliver_feishu(make_team(), s, "rendered 王然", client=client)
+    assert result.ok and not result.mocked
+    assert "应用机器人" in result.detail
+    send_call = client.calls[1]
+    assert send_call["params"]["receive_id_type"] == "chat_id"
+    assert send_call["json"]["receive_id"] == "oc_g"
+    assert "王然" in send_call["json"]["content"]
+
+
+def test_app_bot_rejected_reported():
+    s = Settings(
+        members=tuple(MEMBERS), feishu_app_id="id", feishu_app_secret="sec", feishu_group_id="oc_g"
+    )
+    result = deliver_feishu(make_team(), s, "r", client=FakeAppClient(send_ok=False))
+    assert not result.ok and "code=10002" in result.detail
+
+
+def test_webhook_preferred_over_app_bot():
+    s = Settings(
+        members=tuple(MEMBERS),
+        feishu_bot_webhook="https://hook.example",
+        feishu_app_id="id",
+        feishu_app_secret="sec",
+        feishu_group_id="oc_g",
+    )
+    client = FakeHTTP()
+    result = deliver_feishu(make_team(), s, "r", client=client)
+    assert result.ok and "webhook" in result.detail
+    assert len(client.calls) == 1

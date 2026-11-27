@@ -224,6 +224,11 @@ class BasePusher(ABC):
 
 class EmailPusher(BasePusher): ...
 class FeishuBotPusher(BasePusher): ...
+# FeishuBotPusher 双通道（v1.1 补充，个人版组织无自定义机器人时的替代方案）：
+#   ① webhook（自定义机器人，企业版组织可用）优先；
+#   ② webhook 缺失且 app_id/app_secret/group_id 齐全 → 应用机器人发消息 API
+#      （tenant_access_token → POST /open-apis/im/v1/messages，receive_id_type=chat_id）；
+#   ③ 均缺失 → mock 留痕。
 ```
 
 ### 4.5 主编排入口

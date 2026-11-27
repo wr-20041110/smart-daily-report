@@ -80,17 +80,24 @@ def deliver_feishu(
     rendered: str,
     client: httpx.Client | None = None,
 ) -> PushResult:
-    """飞书自定义机器人推送（文本消息，超长截断）。"""
+    """飞书推送（webhook 优先，缺失时回退应用机器人 API，均缺失则 mock 留痕）。"""
     webhook = settings.feishu_bot_webhook
-    if not webhook:
-        return PushResult(
-            channel="feishu",
-            ok=True,
-            mocked=True,
-            detail=(
-                "FEISHU_BOT_WEBHOOK 未配置，mock 推送（日报已留存 SQLite，配置凭证后自动真实发送）"
-            ),
-        )
+    if webhook:
+        return _deliver_via_webhook(webhook, rendered, client)
+    if settings.feishu_app_id and settings.feishu_app_secret and settings.feishu_group_id:
+        return _deliver_via_app_bot(settings, rendered, client)
+    return PushResult(
+        channel="feishu",
+        ok=True,
+        mocked=True,
+        detail=(
+            "飞书推送凭证未配置（webhook 或应用机器人），mock 推送"
+            "（日报已留存 SQLite，配置凭证后自动真实发送）"
+        ),
+    )
+
+
+def _deliver_via_webhook(webhook: str, rendered: str, client: httpx.Client | None) -> PushResult:
     text = _truncate(rendered)
     try:
         http = client or httpx.Client(timeout=10.0)
@@ -101,7 +108,7 @@ def deliver_feishu(
             else {}
         )
         if resp.status_code == 200 and body.get("code", body.get("StatusCode", 0)) == 0:
-            return PushResult(channel="feishu", ok=True, mocked=False, detail="已推送至团队群")
+            return PushResult(channel="feishu", ok=True, mocked=False, detail="已推送至团队群（webhook）")
         return PushResult(
             channel="feishu",
             ok=False,
@@ -115,6 +122,60 @@ def deliver_feishu(
             mocked=False,
             detail=f"推送失败：{type(exc).__name__}（已脱敏）",
         )
+
+
+def _deliver_via_app_bot(settings, rendered: str, client: httpx.Client | None) -> PushResult:
+    text = _truncate(rendered)
+    try:
+        http = client or httpx.Client(timeout=10.0)
+        token_resp = http.post(
+            "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal",
+            json={"app_id": settings.feishu_app_id, "app_secret": settings.feishu_app_secret},
+        )
+        token_body = token_resp.json()
+        if token_body.get("code") != 0:
+            return PushResult(
+                channel="feishu",
+                ok=False,
+                mocked=False,
+                detail=f"应用凭证无效：code={token_body.get('code')}",
+            )
+        resp = http.post(
+            "https://open.feishu.cn/open-apis/im/v1/messages",
+            params={"receive_id_type": "chat_id"},
+            json={
+                "receive_id": settings.feishu_group_id,
+                "msg_type": "text",
+                "content": _json_text({"text": text}),
+            },
+            headers={"Authorization": f"Bearer {token_body['tenant_access_token']}"},
+        )
+        body = (
+            resp.json()
+            if resp.headers.get("content-type", "").startswith("application/json")
+            else {}
+        )
+        if resp.status_code == 200 and body.get("code") == 0:
+            return PushResult(channel="feishu", ok=True, mocked=False, detail="已推送至团队群（应用机器人）")
+        return PushResult(
+            channel="feishu",
+            ok=False,
+            mocked=False,
+            detail=f"推送被拒：HTTP {resp.status_code} code={body.get('code')}",
+        )
+    except httpx.HTTPError as exc:
+        return PushResult(
+            channel="feishu",
+            ok=False,
+            mocked=False,
+            detail=f"推送失败：{type(exc).__name__}（已脱敏）",
+        )
+
+
+def _json_text(payload: dict) -> str:
+    import json
+
+    return json.dumps(payload, ensure_ascii=False)
 
 
 def _truncate(text: str, limit: int = 140_000) -> str:

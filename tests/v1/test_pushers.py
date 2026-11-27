@@ -136,3 +136,47 @@ def test_feishu_webhook_network_error():
         make_team()
     )
     assert not result.ok
+
+
+class FakeAppBotClient:
+    """应用机器人通道假客户端：第一次 post 换 token，第二次发消息。"""
+
+    def __init__(self, send_ok=True):
+        self.send_ok = send_ok
+        self.calls = []
+
+    def post(self, url, json=None, params=None, headers=None):
+        self.calls.append({"url": url, "json": json, "params": params, "headers": headers})
+        if "tenant_access_token" in url:
+            return httpx.Response(200, json={"code": 0, "tenant_access_token": "t-tok"})
+        return httpx.Response(200, json={"code": 0} if self.send_ok else {"code": 10002})
+
+    def close(self):
+        pass
+
+
+def test_app_bot_push_success_without_webhook():
+    client = FakeAppBotClient()
+    pusher = FeishuBotPusher(None, "id", "sec", "oc_group", session=client)
+    result = pusher.push(make_team())
+    assert result.ok and not result.mocked
+    assert "应用机器人" in result.detail
+    send_call = client.calls[1]
+    assert send_call["params"]["receive_id_type"] == "chat_id"
+    assert send_call["json"]["receive_id"] == "oc_group"
+    assert send_call["json"]["msg_type"] == "text"
+    assert send_call["headers"]["Authorization"] == "Bearer t-tok"
+
+
+def test_app_bot_rejected_reported():
+    client = FakeAppBotClient(send_ok=False)
+    result = FeishuBotPusher(None, "id", "sec", "oc_group", session=client).push(make_team())
+    assert not result.ok and "code=10002" in result.detail
+
+
+def test_webhook_preferred_over_app_bot():
+    client = FakeWebhookClient()
+    pusher = FeishuBotPusher("https://hook.example", "id", "sec", "oc_group", session=client)
+    result = pusher.push(make_team())
+    assert result.ok and "webhook" in result.detail
+    assert len(client.calls) == 1  # 未走 token 通道

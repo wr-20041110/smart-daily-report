@@ -121,5 +121,10 @@ def _choose_pushers(settings: Settings) -> list[BasePusher]:
             settings.report_sender,
             settings.report_recipients,
         ),
-        FeishuBotPusher(settings.feishu_bot_webhook),
+        FeishuBotPusher(
+            settings.feishu_bot_webhook,
+            settings.feishu_app_id,
+            settings.feishu_app_secret,
+            settings.feishu_group_id,
+        ),
     ]
