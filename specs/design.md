@@ -313,3 +313,39 @@ CLI：`python -m daily_report_v1 [--date YYYY-MM-DD] [--mock] [--no-push]`
 | 可追溯 | 每条日报条目携带 raw_refs，可回溯原始事件 | DailyReportEntry.raw_refs |
 | 可维护性 | 数据源可替换（同 BaseCollector 契约） | 新增采集源 = 新增一个 Collector 类 + 注册 |
 | 时区 | 事件 UTC 存储，本地时间展示（Asia/Shanghai） | 采集层统一转 UTC；生成层转本地 |
+
+---
+
+## 附录 A：v2 架构补充（阶段二 · Superpowers 工作流，变更涟漪产物）
+
+阶段二从零重做时，继承本文件 ADR 结论与接口契约作为"设计经验"，但**不复用 v1 任何源码**，
+并按下述新架构重新实现（对比分析见项目总结报告第 2 章）：
+
+### A.1 v2 架构：注册表 + 规则管道（纯函数核心）
+
+与 v1 的"继承式分层类架构"（Collector/Pusher 抽象基类 + 子类）不同，v2 采用：
+
+- **注册表**：采集器与推送器以「名称 → 工厂函数」注册（`fetch.py` / `deliver.py` 顶部 `REGISTRY` 字典），
+  新增数据源 = 注册一个新函数 + 一个测试文件，不改任何既有核心代码（开放封闭）；
+- **规则管道**：协同归属规则 R1/R2/R3 实现为独立纯函数列表（`rules.py` 的 `RULES`），
+  对每条事件顺序应用，命中即产出归属记录——新增规则追加列表项即可；
+- **纯函数核心**：`synthesize.py` / `rules.py` 全部为无状态纯函数，输入输出即契约，测试无需 mock；
+- **管道编排**：`pipeline.py` 以数据流串联各阶段，与 v1 的 Orchestrator 类等价但以函数组合实现。
+
+### A.2 模块映射（v1 → v2）
+
+| v1（类） | v2（函数式） | 说明 |
+| --- | --- | --- |
+| collectors/github.py GitHubCollector | fetch.py `fetch_github()` | 注册表项 `"github"` |
+| collectors/feishu.py FeishuTaskCollector | fetch.py `fetch_feishu_task()` | 注册表项 `"feishu_task"` |
+| collectors/feishu.py FeishuMessageCollector | fetch.py `fetch_feishu_message()` | 注册表项 `"feishu_message"` |
+| collectors/mock_data.py MockCollector | fetch.py `fetch_mock()` | 注册表项按 mock 场景生成 |
+| generators/report_generator.py | rules.py + synthesize.py | 归属规则与条目聚合分离 |
+| pushers/ | deliver.py `deliver_email()` / `deliver_feishu()` | 注册表项 `"email"` / `"feishu"` |
+| orchestrator.py run_pipeline() | pipeline.py `run_pipeline()` | 函数组合 |
+
+### A.3 变更单（第 4 周）：新增考勤采集
+
+- proposal.md 范围新增 **F12 飞书考勤采集**（采集当日打卡记录，归入个人日报"开发"分类的"考勤"子条目）；"不做什么" X3 移除并改注"已于 v1.1 变更单实施"；
+- 本文件新增契约：`fetch_feishu_attendance()`（注册表项 `"feishu_attendance"`）——入参 day，返回 `source="feishu_attendance"` 的打卡事件（上/下午首末次共 4 字段入 payload）；
+- tasks-v2.md 新增 T212–T214；数据模型不变（RawEvent 的 source 字段新增枚举值，payload 承载打卡明细）。
