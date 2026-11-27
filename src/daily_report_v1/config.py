@@ -33,7 +33,9 @@ class Settings:
 
     @property
     def is_github_ready(self) -> bool:
-        return bool(self.github_token and self.github_repo)
+        # 仓库名含【占位符未替换视为未就绪，保持 mock 模式（演示防护）
+        repo_ok = bool(self.github_repo) and "【" not in (self.github_repo or "")
+        return bool(self.github_token and repo_ok)
 
     @property
     def is_feishu_ready(self) -> bool:
