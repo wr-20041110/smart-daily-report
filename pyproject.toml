@@ -36,3 +36,9 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP"]
+
+# 报告生成脚本的正文为中文内容数据（长段落），按内容而非代码处理；
+# 源代码（src/）与测试（tests/）保持零告警门禁
+[tool.ruff.lint.per-file-ignores]
+"tools/gen_reports_*.py" = ["E501"]
+"tools/reportkit.py" = ["E501"]
