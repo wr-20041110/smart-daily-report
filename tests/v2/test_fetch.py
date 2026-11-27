@@ -197,3 +197,16 @@ def test_attendance_mapping():
     assert len(events) == 1  # 非团队成员考勤被过滤
     assert events[0].source == "feishu_attendance"
     assert events[0].payload["period"] == "am_in"
+
+
+def test_tenant_token_cached(monkeypatch):
+    """同一 app 的 token 在缓存期内只换取一次（防平台频率风控）。"""
+    import daily_report_v2.fetch as mod
+
+    monkeypatch.setitem(mod._TOKEN_CACHE, "cached-app", ("t-cached", mod.time.monotonic()))
+    s = Settings(
+        members=tuple(MEMBERS), feishu_app_id="cached-app", feishu_app_secret="sec"
+    )
+    client = FakeClient([[]])
+    assert mod._tenant_token(s, client) == "t-cached"
+    assert client.calls == []  # 命中缓存，零 HTTP 请求

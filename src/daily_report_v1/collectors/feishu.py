@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import re
+import time
 from datetime import UTC, date, datetime
 
 import httpx
@@ -23,6 +24,9 @@ from .base import BaseCollector, day_window
 
 #: 消息正文中的 @提及（飞书消息 content.text 内联展示名）
 _MENTION_RE = re.compile(r"@([^\s@，。！？,.!?]+)")
+
+#: tenant_access_token 应用级缓存（有效期 7199s，缓存 7000s 留余量）
+_TOKEN_CACHE: dict[str | None, tuple[str, float]] = {}
 
 
 class _FeishuBase(BaseCollector):
@@ -46,6 +50,10 @@ class _FeishuBase(BaseCollector):
 
     def _tenant_token(self) -> str:
         self._require_credentials()
+        # 应用级缓存（有效期 7199s，缓存 7000s 留余量），避免频繁换取触发平台风控（21001）
+        cached = _TOKEN_CACHE.get(self.app_id)
+        if cached and time.monotonic() - cached[1] < 7000:
+            return cached[0]
         self._guard_request()
         resp = self._retry(
             self._client.post,
@@ -58,7 +66,9 @@ class _FeishuBase(BaseCollector):
             raise CredentialsMissingError(
                 f"飞书凭证无效：code={body.get('code')} {body.get('msg')}"
             )
-        return body["tenant_access_token"]
+        token = body["tenant_access_token"]
+        _TOKEN_CACHE[self.app_id] = (token, time.monotonic())
+        return token
 
     def _get(self, url: str, token: str, params: dict | None = None) -> dict:
         self._guard_request()

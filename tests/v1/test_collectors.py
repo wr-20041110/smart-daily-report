@@ -225,3 +225,15 @@ def test_feishu_message_requires_group():
     client = FakeFeishuClient([{"code": 0, "data": {"items": []}}])
     with pytest.raises(CredentialsMissingError):
         FeishuMessageCollector("id", "sec", None, session=client).collect(DAY)
+
+
+def test_tenant_token_cached(monkeypatch):
+    """同一 app 的 token 在缓存期内只换取一次（防平台频率风控）。"""
+    import daily_report_v1.collectors.feishu as mod
+
+    monkeypatch.setitem(mod._TOKEN_CACHE, "cached-app", ("t-cached", mod.time.monotonic()))
+    client = FakeFeishuClient([{"code": 0, "data": {"items": []}}])
+    collector = FeishuTaskCollector("cached-app", "sec", [], session=client)
+    collector.collect(DAY)  # _tenant_token 命中缓存，仅任务列表一个请求
+    assert len(client.calls) == 1
+    assert client.calls[0]["url"].startswith("/open-apis/task")

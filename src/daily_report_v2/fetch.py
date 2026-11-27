@@ -325,11 +325,19 @@ def fetch_feishu_attendance(
     return events
 
 
+#: tenant_access_token 应用级缓存（有效期 7199s，缓存 7000s 留余量）。
+#: 避免每个采集器各自换 token，防止触发平台频率风控（21001）。
+_TOKEN_CACHE: dict[str, tuple[str, float]] = {}
+
+
 def _tenant_token(settings, session: httpx.Client | None) -> str:
     app_id = getattr(settings, "feishu_app_id", None)
     app_secret = getattr(settings, "feishu_app_secret", None)
     if not (app_id and app_secret):
         raise CredentialsMissingError("FEISHU_APP_ID / FEISHU_APP_SECRET 未配置")
+    cached = _TOKEN_CACHE.get(app_id)
+    if cached and time.monotonic() - cached[1] < 7000:
+        return cached[0]
     client = session or httpx.Client(base_url="https://open.feishu.cn", timeout=10.0)
     resp = client.post(
         "/open-apis/auth/v3/tenant_access_token/internal",
@@ -339,7 +347,9 @@ def _tenant_token(settings, session: httpx.Client | None) -> str:
     body = resp.json()
     if body.get("code") != 0:
         raise CredentialsMissingError(f"飞书凭证无效：code={body.get('code')} {body.get('msg')}")
-    return body["tenant_access_token"]
+    token = body["tenant_access_token"]
+    _TOKEN_CACHE[app_id] = (token, time.monotonic())
+    return token
 
 
 # --------------------------------------------------------------------------
