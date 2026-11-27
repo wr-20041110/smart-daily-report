@@ -6,25 +6,25 @@
     {
       "name": "王然",
       "github_username": "wr-20041110",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "feishu_open_id": "ou_wr-20041110",
       "email": "1839636091@qq.com"
     },
     {
       "name": "咸哲",
       "github_username": "xz0622",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "feishu_open_id": "ou_xz0622",
       "email": "1300622114@qq.com"
     },
     {
       "name": "王峻羽",
       "github_username": "wjy-jjj",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "feishu_open_id": "ou_wjy-jjj",
       "email": "2476650375@qq.com"
     },
     {
       "name": "尹博弘",
       "github_username": "Yin-bo-hong",
-      "feishu_open_id": "ou_【替换为真实飞书 open_id】",
+      "feishu_open_id": "ou_yinbohong",
       "email": "20233159@stu.ccut.edu.cn"
     }
   ],
@@ -37,5 +37,6 @@
       "【替换为收件邮箱，可多个】"
     ]
   },
-  "db_path": "data/reports.db"
+  "db_path": "data/reports.db",
+  "_说明": "feishu_open_id 当前为与 mock 数据集一致的过渡占位值；申请到真实飞书 open_id 后替换此文件中的对应值即可"
 }
