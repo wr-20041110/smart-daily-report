@@ -23,11 +23,13 @@
     }
   ],
   "feishu": {
-    "group_id": "oc_【替换为真实群 ID】"
+    "group_id": "oc_9b090c9c1c52b836e84be91dad10394f"
   },
   "report": {
     "sender": "【替换为发件邮箱】",
-    "recipients": ["【替换为收件邮箱，可多个】"]
+    "recipients": [
+      "【替换为收件邮箱，可多个】"
+    ]
   },
   "db_path": "data/reports.db"
 }
