@@ -57,6 +57,7 @@ class Settings:
 
 def load_settings(config_path: str | Path | None = None, mock: bool = False) -> Settings:
     """从 config.json + 环境变量构建 Settings（tasks.md T2 验收标准）。"""
+    _load_dotenv()
     path = Path(config_path) if config_path else Path("config.json")
     if not path.exists():
         raise ConfigError(
@@ -94,3 +95,16 @@ def load_settings(config_path: str | Path | None = None, mock: bool = False) -> 
     )
     settings.validate()
     return settings
+
+
+def _load_dotenv(path: str | Path | None = None) -> None:
+    """读取 .env（KEY=VALUE 行）注入环境变量；已存在的环境变量优先，凭证仍不落代码。"""
+    dotenv = Path(path) if path else Path(".env")
+    if not dotenv.exists():
+        return
+    for line in dotenv.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip())

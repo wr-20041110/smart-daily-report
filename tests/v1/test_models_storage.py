@@ -83,3 +83,17 @@ def test_rerun_overwrites_team_report(tmp_path):
         "SELECT COUNT(*) FROM team_reports WHERE report_date = ?", (DAY.isoformat(),)
     ).fetchone()[0]
     assert n == 1  # 同日期覆盖更新（幂等重跑）
+
+
+def test_dotenv_loading(tmp_path, monkeypatch):
+    """凭证可经 .env 文件注入环境变量（已存在的环境变量优先，不覆盖）。"""
+    import daily_report_v1.config as cfg
+
+    env_file = tmp_path / ".env"
+    env_file.write_text("GITHUB_TOKEN=from-dotenv\nSMTP_PORT=587\n# 注释行\n", encoding="utf-8")
+    monkeypatch.setenv("GITHUB_TOKEN", "already-set")
+    cfg._load_dotenv(env_file)
+    import os
+
+    assert os.environ["GITHUB_TOKEN"] == "already-set"  # 已有环境变量优先
+    assert os.environ["SMTP_PORT"] == "587"

@@ -60,3 +60,16 @@ def test_incomplete_member_fields_rejected():
     }
     with pytest.raises(ConfigError, match="不完整"):
         build_settings(raw, {})
+
+
+def test_dotenv_loading(tmp_path, monkeypatch):
+    import os
+
+    import daily_report_v2.settings as mod
+
+    env_file = tmp_path / ".env"
+    env_file.write_text("GITHUB_TOKEN=from-dotenv\nSMTP_PORT=587\n# 注释行\n", encoding="utf-8")
+    monkeypatch.setenv("GITHUB_TOKEN", "already-set")
+    mod._load_dotenv(env_file)
+    assert os.environ["GITHUB_TOKEN"] == "already-set"
+    assert os.environ["SMTP_PORT"] == "587"
