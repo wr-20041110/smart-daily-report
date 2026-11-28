@@ -71,7 +71,17 @@ def build_business_survey() -> str:
     r.p("调研对象共同的核心流程为：数据源记录工作痕迹 → 定时/手动触发 → 按人聚合 → 模板渲染 → 推送。"
         "本项目对应流程见需求分析报告第 2 章泳道图（specs/uml/swimlane.puml），"
         "与调研对象的关键差异在“聚合”与“渲染”之间插入协同归属环节。")
-    r.p("调研截图：见 docs/records/03-竞品调研记录.md 中【截图占位】处，需替换为组员实际调研截图。")
+    r.fig(
+        "开源日报机器人调研截图（方案 B）",
+        "GitHub 开源项目 README 截图，归档于 docs/records/调研截图/",
+        png=str(OUT.parent / "records" / "调研截图" / "b-开源bot-微信接龙日报.png"),
+    )
+    r.fig(
+        "飞书多维表格调研截图（方案 C）",
+        "飞书客户端工作台实测截图，归档于 docs/records/调研截图/",
+        png=str(OUT.parent / "records" / "调研截图" / "c-飞书多维表格.png"),
+    )
+    r.p("方案 A（项目管理工具周报）截图待补充（禅道演示环境 demo.zentao.net 最快）。")
 
     r.h1("第4章 调研结论分析")
     r.h2("4.1 易用性对比")
