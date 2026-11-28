@@ -73,7 +73,7 @@ def build_business_survey() -> str:
         "与调研对象的关键差异在“聚合”与“渲染”之间插入协同归属环节。")
     r.fig(
         "开源日报机器人调研截图（方案 B）",
-        "GitHub 开源项目 README 截图，归档于 docs/records/调研截图/",
+        "perrycan/wechat-daily-report-bot 项目 README 截图，归档于 docs/records/调研截图/",
         png=str(OUT.parent / "records" / "调研截图" / "b-开源bot-微信接龙日报.png"),
     )
     r.fig(
