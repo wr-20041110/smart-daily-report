@@ -5,10 +5,10 @@
 标注答案见 EXPECTED_ATTRIBUTION，用于成功标准 SC4 的归属正确率验收。
 
 平台账号（占位，替换为真实账号后重跑即可）：
-  王然   github=wr-20041110      feishu=ou_wr-20041110
-  咸哲   github=xz0622      feishu=ou_xz0622
-  王峻羽 github=wjy-jjj    feishu=ou_wjy-jjj
-  尹博弘 github=Yin-bo-hong feishu=ou_yinbohong
+  王然   github=wr-20041110      feishu=ou_9fb641793dcb3547d8d1c4e655b7e589
+  咸哲   github=xz0622      feishu=ou_1285ac40fd873adf31e91d930be504b3
+  王峻羽 github=wjy-jjj    feishu=ou_5e774c1fe692bb17cd0d4f7a0dd93076
+  尹博弘 github=Yin-bo-hong feishu=ou_234449d3b4e94f58f064f33dbd2736c0
 """
 
 from __future__ import annotations
@@ -49,40 +49,80 @@ _COMMITS: list[tuple[str, str, list[str], int]] = [
 
 # (经办人 open_id, 标题, 协作人 open_id 列表, 状态)
 _TASKS: list[tuple[str, str, list[str], str]] = [
-    ("ou_wr-20041110", "评审 proposal.md 范围条目", [], "done"),
-    ("ou_wr-20041110", "编写需求澄清问答记录", ["ou_xz0622"], "done"),  # 协作#5
-    ("ou_wr-20041110", "核对成功标准可度量性", [], "done"),
-    ("ou_wr-20041110", "整理隐含需求清单", [], "done"),
-    ("ou_xz0622", "绘制用例图与泳道图", [], "done"),
-    ("ou_xz0622", "撰写 ADR-001/002 初稿", [], "done"),
-    ("ou_xz0622", "红队评审 design.md", ["ou_wr-20041110"], "done"),  # 协作#6
-    ("ou_xz0622", "梳理非功能约束清单", [], "done"),
-    ("ou_wjy-jjj", "搭建仓库目录与 git 规范", [], "done"),
-    ("ou_wjy-jjj", "配置 ruff 静态扫描", [], "done"),
-    ("ou_wjy-jjj", "实现存储层 init_db", [], "done"),
-    ("ou_wjy-jjj", "编写集成测试骨架", ["ou_yinbohong"], "doing"),  # 协作#7
-    ("ou_yinbohong", "设计 SQLite 表结构", ["ou_wjy-jjj"], "done"),  # 协作#8
-    ("ou_yinbohong", "归档组内 AI 使用日志", [], "done"),
-    ("ou_yinbohong", "准备阶段评审会演示脚本", [], "doing"),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "评审 proposal.md 范围条目", [], "done"),
+    (
+        "ou_9fb641793dcb3547d8d1c4e655b7e589",
+        "编写需求澄清问答记录",
+        ["ou_1285ac40fd873adf31e91d930be504b3"],
+        "done",
+    ),  # 协作#5
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "核对成功标准可度量性", [], "done"),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "整理隐含需求清单", [], "done"),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "绘制用例图与泳道图", [], "done"),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "撰写 ADR-001/002 初稿", [], "done"),
+    (
+        "ou_1285ac40fd873adf31e91d930be504b3",
+        "红队评审 design.md",
+        ["ou_9fb641793dcb3547d8d1c4e655b7e589"],
+        "done",
+    ),  # 协作#6
+    ("ou_1285ac40fd873adf31e91d930be504b3", "梳理非功能约束清单", [], "done"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "搭建仓库目录与 git 规范", [], "done"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "配置 ruff 静态扫描", [], "done"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "实现存储层 init_db", [], "done"),
+    (
+        "ou_5e774c1fe692bb17cd0d4f7a0dd93076",
+        "编写集成测试骨架",
+        ["ou_234449d3b4e94f58f064f33dbd2736c0"],
+        "doing",
+    ),  # 协作#7
+    (
+        "ou_234449d3b4e94f58f064f33dbd2736c0",
+        "设计 SQLite 表结构",
+        ["ou_5e774c1fe692bb17cd0d4f7a0dd93076"],
+        "done",
+    ),  # 协作#8
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "归档组内 AI 使用日志", [], "done"),
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "准备阶段评审会演示脚本", [], "doing"),
 ]
 
 # (发言者 open_id, 消息摘要, @提及 open_id 列表, 关联任务 ID 或 None)
 _MESSAGES: list[tuple[str, str, list[str], str | None]] = [
-    ("ou_wr-20041110", "晨会同步：今天先过 proposal 范围", [], None),
-    ("ou_wr-20041110", "@咸哲 T-101 的接口契约帮我看看", ["ou_xz0622"], "T-101"),  # 协作#9
-    ("ou_wr-20041110", "调研结论已更新到文档", [], None),
-    ("ou_wr-20041110", "mock 数据集还要补 2 条协作事件", [], None),
-    ("ou_xz0622", "用例图初版已提交", [], None),
-    ("ou_xz0622", "红队评审问题清单发群里了", [], None),
-    ("ou_xz0622", "@王然 design.md 3.2 表结构已改好", ["ou_wr-20041110"], "T-102"),  # 协作#10
-    ("ou_xz0622", "晚上 7 点过一遍演示", [], None),
-    ("ou_wjy-jjj", "数据库幂等测试通过", [], None),
-    ("ou_wjy-jjj", "@咸哲 T-105 时区用例过了吗", ["ou_xz0622"], "T-105"),  # 协作#11
-    ("ou_wjy-jjj", "tag 和提交规范已整理", [], None),
-    ("ou_wjy-jjj", "CI 门禁跑通了", [], None),
-    ("ou_yinbohong", "飞书凭证审核还在等", [], None),
-    ("ou_yinbohong", "@王峻羽 T-107 回归用例一起看", ["ou_wjy-jjj"], "T-107"),  # 协作#12
-    ("ou_yinbohong", "明天评审会材料我来整理", [], None),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "晨会同步：今天先过 proposal 范围", [], None),
+    (
+        "ou_9fb641793dcb3547d8d1c4e655b7e589",
+        "@咸哲 T-101 的接口契约帮我看看",
+        ["ou_1285ac40fd873adf31e91d930be504b3"],
+        "T-101",
+    ),  # 协作#9
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "调研结论已更新到文档", [], None),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "mock 数据集还要补 2 条协作事件", [], None),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "用例图初版已提交", [], None),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "红队评审问题清单发群里了", [], None),
+    (
+        "ou_1285ac40fd873adf31e91d930be504b3",
+        "@王然 design.md 3.2 表结构已改好",
+        ["ou_9fb641793dcb3547d8d1c4e655b7e589"],
+        "T-102",
+    ),  # 协作#10
+    ("ou_1285ac40fd873adf31e91d930be504b3", "晚上 7 点过一遍演示", [], None),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "数据库幂等测试通过", [], None),
+    (
+        "ou_5e774c1fe692bb17cd0d4f7a0dd93076",
+        "@咸哲 T-105 时区用例过了吗",
+        ["ou_1285ac40fd873adf31e91d930be504b3"],
+        "T-105",
+    ),  # 协作#11
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "tag 和提交规范已整理", [], None),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "CI 门禁跑通了", [], None),
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "飞书凭证审核还在等", [], None),
+    (
+        "ou_234449d3b4e94f58f064f33dbd2736c0",
+        "@王峻羽 T-107 回归用例一起看",
+        ["ou_5e774c1fe692bb17cd0d4f7a0dd93076"],
+        "T-107",
+    ),  # 协作#12
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "明天评审会材料我来整理", [], None),
 ]
 
 #: 12 条协作事件的标注答案：ref -> 应归属的成员姓名（成功标准 SC4 验收基准）

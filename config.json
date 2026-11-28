@@ -6,25 +6,25 @@
     {
       "name": "王然",
       "github_username": "wr-20041110",
-      "feishu_open_id": "ou_wr-20041110",
+      "feishu_open_id": "ou_9fb641793dcb3547d8d1c4e655b7e589",
       "email": "1839636091@qq.com"
     },
     {
       "name": "咸哲",
       "github_username": "xz0622",
-      "feishu_open_id": "ou_xz0622",
+      "feishu_open_id": "ou_1285ac40fd873adf31e91d930be504b3",
       "email": "1300622114@qq.com"
     },
     {
       "name": "王峻羽",
       "github_username": "wjy-jjj",
-      "feishu_open_id": "ou_wjy-jjj",
+      "feishu_open_id": "ou_5e774c1fe692bb17cd0d4f7a0dd93076",
       "email": "2476650375@qq.com"
     },
     {
       "name": "尹博弘",
       "github_username": "Yin-bo-hong",
-      "feishu_open_id": "ou_yinbohong",
+      "feishu_open_id": "ou_234449d3b4e94f58f064f33dbd2736c0",
       "email": "20233159@stu.ccut.edu.cn"
     }
   ],
@@ -41,5 +41,5 @@
     ]
   },
   "db_path": "data/reports.db",
-  "_说明": "feishu_open_id 当前为与 mock 数据集一致的过渡占位值；飞书风控解除拿到真实 open_id 后，替换此文件中的对应值即可"
+  "_说明": "feishu_open_id 已确认为真实值（2026-11-28 从群消息解析，全员已进群）"
 }

@@ -253,6 +253,9 @@ def fetch_feishu_message(
         raise CollectorError(f"飞书接口调用失败：code={body.get('code')} {body.get('msg')}")
     events = []
     for item in (body.get("data") or {}).get("items", []):
+        sender = item.get("sender") or {}
+        if sender.get("sender_type") != "user":
+            continue  # 机器人消息与系统通知不计入成员日报（避免"未映射"噪音）
         content = json_loads_safe((item.get("body") or {}).get("content", "{}"))
         text = content.get("text", "")
         mentions = tuple(
@@ -264,7 +267,7 @@ def fetch_feishu_message(
                 source="feishu_message",
                 event_type="message",
                 ref=item.get("message_id", ""),
-                author=(item.get("sender") or {}).get("id", ""),
+                author=sender.get("id", ""),
                 occurred_at=_parse_any(item.get("create_time")),
                 title=text[:80] or "(非文本消息)",
                 url=f"https://feishu.cn/msg/{item.get('message_id', '')}",
@@ -380,50 +383,90 @@ _GH_COMMITS: list[tuple[str, str, list[str], int]] = [
 ]
 
 _FS_TASKS: list[tuple[str, str, list[str], str]] = [
-    ("ou_wr-20041110", "review tasks-v2.md 任务粒度", [], "done"),
-    ("ou_wr-20041110", "编写 TDD 红绿循环记录", ["ou_xz0622"], "done"),  # 协作 v2#5
-    ("ou_wr-20041110", "核对 SC4 标注数据集", [], "done"),
-    ("ou_wr-20041110", "整理隐含需求清单 v2", [], "done"),
-    ("ou_xz0622", "绘制 v2 架构图", [], "done"),
-    ("ou_xz0622", "code-review 互评 T204 提交", [], "done"),
-    ("ou_xz0622", "red-team 评审 rules.py", ["ou_wr-20041110"], "done"),  # 协作 v2#6
-    ("ou_xz0622", "梳理变更单影响面", [], "done"),
-    ("ou_wjy-jjj", "搭建 ruff 静态门禁", [], "done"),
-    ("ou_wjy-jjj", "配置 coverage 阈值", [], "done"),
-    ("ou_wjy-jjj", "实现 store 三表结构", [], "done"),
-    ("ou_wjy-jjj", "编写回归测试骨架", ["ou_yinbohong"], "doing"),  # 协作 v2#7
-    ("ou_yinbohong", "设计考勤字段映射", ["ou_wjy-jjj"], "done"),  # 协作 v2#8
-    ("ou_yinbohong", "归档 AI 使用日志", [], "done"),
-    ("ou_yinbohong", "准备 v2 演示脚本", [], "doing"),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "review tasks-v2.md 任务粒度", [], "done"),
+    (
+        "ou_9fb641793dcb3547d8d1c4e655b7e589",
+        "编写 TDD 红绿循环记录",
+        ["ou_1285ac40fd873adf31e91d930be504b3"],
+        "done",
+    ),  # 协作 v2#5
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "核对 SC4 标注数据集", [], "done"),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "整理隐含需求清单 v2", [], "done"),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "绘制 v2 架构图", [], "done"),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "code-review 互评 T204 提交", [], "done"),
+    (
+        "ou_1285ac40fd873adf31e91d930be504b3",
+        "red-team 评审 rules.py",
+        ["ou_9fb641793dcb3547d8d1c4e655b7e589"],
+        "done",
+    ),  # 协作 v2#6
+    ("ou_1285ac40fd873adf31e91d930be504b3", "梳理变更单影响面", [], "done"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "搭建 ruff 静态门禁", [], "done"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "配置 coverage 阈值", [], "done"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "实现 store 三表结构", [], "done"),
+    (
+        "ou_5e774c1fe692bb17cd0d4f7a0dd93076",
+        "编写回归测试骨架",
+        ["ou_234449d3b4e94f58f064f33dbd2736c0"],
+        "doing",
+    ),  # 协作 v2#7
+    (
+        "ou_234449d3b4e94f58f064f33dbd2736c0",
+        "设计考勤字段映射",
+        ["ou_5e774c1fe692bb17cd0d4f7a0dd93076"],
+        "done",
+    ),  # 协作 v2#8
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "归档 AI 使用日志", [], "done"),
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "准备 v2 演示脚本", [], "doing"),
 ]
 
 _FS_MESSAGES: list[tuple[str, str, list[str], str | None]] = [
-    ("ou_wr-20041110", "晨会：今天按 executing-plans 逐任务推进", [], None),
-    ("ou_wr-20041110", "@咸哲 T-201 骨架帮我评审", ["ou_xz0622"], "T-201"),  # 协作 v2#9
-    ("ou_wr-20041110", "红绿循环记录已更新", [], None),
-    ("ou_wr-20041110", "规则引擎还有 2 条用例要补", [], None),
-    ("ou_xz0622", "T204 失败测试已提交", [], None),
-    ("ou_xz0622", "systematic-debugging 记录模板放群文件了", [], None),
-    ("ou_xz0622", "@王然 rules.py 评审意见 3 条", ["ou_wr-20041110"], "T-207"),  # 协作 v2#10
-    ("ou_xz0622", "晚上 7 点半过一遍演示", [], None),
-    ("ou_wjy-jjj", "store 幂等测试通过", [], None),
-    ("ou_wjy-jjj", "@咸哲 T-209 脱敏断言过了吗", ["ou_xz0622"], "T-209"),  # 协作 v2#11
-    ("ou_wjy-jjj", "ruff 0 告警了", [], None),
-    ("ou_wjy-jjj", "CI 门禁跑通", [], None),
-    ("ou_yinbohong", "考勤变更单影响面已梳理", [], None),
-    ("ou_yinbohong", "@王峻羽 T-213 回归一起看", ["ou_wjy-jjj"], "T-213"),  # 协作 v2#12
-    ("ou_yinbohong", "变更涟漪回归我来牵头", [], None),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "晨会：今天按 executing-plans 逐任务推进", [], None),
+    (
+        "ou_9fb641793dcb3547d8d1c4e655b7e589",
+        "@咸哲 T-201 骨架帮我评审",
+        ["ou_1285ac40fd873adf31e91d930be504b3"],
+        "T-201",
+    ),  # 协作 v2#9
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "红绿循环记录已更新", [], None),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "规则引擎还有 2 条用例要补", [], None),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "T204 失败测试已提交", [], None),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "systematic-debugging 记录模板放群文件了", [], None),
+    (
+        "ou_1285ac40fd873adf31e91d930be504b3",
+        "@王然 rules.py 评审意见 3 条",
+        ["ou_9fb641793dcb3547d8d1c4e655b7e589"],
+        "T-207",
+    ),  # 协作 v2#10
+    ("ou_1285ac40fd873adf31e91d930be504b3", "晚上 7 点半过一遍演示", [], None),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "store 幂等测试通过", [], None),
+    (
+        "ou_5e774c1fe692bb17cd0d4f7a0dd93076",
+        "@咸哲 T-209 脱敏断言过了吗",
+        ["ou_1285ac40fd873adf31e91d930be504b3"],
+        "T-209",
+    ),  # 协作 v2#11
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "ruff 0 告警了", [], None),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "CI 门禁跑通", [], None),
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "考勤变更单影响面已梳理", [], None),
+    (
+        "ou_234449d3b4e94f58f064f33dbd2736c0",
+        "@王峻羽 T-213 回归一起看",
+        ["ou_5e774c1fe692bb17cd0d4f7a0dd93076"],
+        "T-213",
+    ),  # 协作 v2#12
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "变更涟漪回归我来牵头", [], None),
 ]
 
 _ATTENDANCE: list[tuple[str, str, str]] = [
-    ("ou_wr-20041110", "09:02", "am_in"),
-    ("ou_wr-20041110", "18:05", "pm_out"),
-    ("ou_xz0622", "08:58", "am_in"),
-    ("ou_xz0622", "17:59", "pm_out"),
-    ("ou_wjy-jjj", "09:10", "am_in"),
-    ("ou_wjy-jjj", "18:12", "pm_out"),
-    ("ou_yinbohong", "09:15", "am_in"),
-    ("ou_yinbohong", "18:20", "pm_out"),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "09:02", "am_in"),
+    ("ou_9fb641793dcb3547d8d1c4e655b7e589", "18:05", "pm_out"),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "08:58", "am_in"),
+    ("ou_1285ac40fd873adf31e91d930be504b3", "17:59", "pm_out"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "09:10", "am_in"),
+    ("ou_5e774c1fe692bb17cd0d4f7a0dd93076", "18:12", "pm_out"),
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "09:15", "am_in"),
+    ("ou_234449d3b4e94f58f064f33dbd2736c0", "18:20", "pm_out"),
 ]
 
 #: 12 条标注协作事件（ref -> 应归属成员姓名），SC4 验收基准（v2 数据集）
@@ -537,6 +580,8 @@ def _parse_iso(value) -> datetime:
 def _parse_any(value) -> datetime:
     if isinstance(value, (int, float)):
         return datetime.fromtimestamp(value / 1000, tz=UTC)
+    if isinstance(value, str) and value.isdigit():
+        return datetime.fromtimestamp(int(value) / 1000, tz=UTC)  # 毫秒时间戳字符串
     return _parse_iso(value)
 
 

@@ -12,10 +12,12 @@ from daily_report_v2.settings import Settings
 DAY = date(2026, 12, 1)
 
 MEMBERS = [
-    Member("王然", "wr-20041110", "ou_wr-20041110", "wr-20041110@example.com"),
-    Member("咸哲", "xz0622", "ou_xz0622", "xz0622@example.com"),
-    Member("王峻羽", "wjy-jjj", "ou_wjy-jjj", "wjy-jjj@example.com"),
-    Member("尹博弘", "Yin-bo-hong", "ou_yinbohong", "20233159@stu.ccut.edu.cn"),
+    Member("王然", "wr-20041110", "ou_9fb641793dcb3547d8d1c4e655b7e589", "wr-20041110@example.com"),
+    Member("咸哲", "xz0622", "ou_1285ac40fd873adf31e91d930be504b3", "xz0622@example.com"),
+    Member("王峻羽", "wjy-jjj", "ou_5e774c1fe692bb17cd0d4f7a0dd93076", "wjy-jjj@example.com"),
+    Member(
+        "尹博弘", "Yin-bo-hong", "ou_234449d3b4e94f58f064f33dbd2736c0", "20233159@stu.ccut.edu.cn"
+    ),
 ]
 
 

@@ -173,6 +173,9 @@ class FeishuMessageCollector(_FeishuBase):
         )
         events: list[RawEvent] = []
         for item in data.get("items", []):
+            sender = item.get("sender") or {}
+            if sender.get("sender_type") != "user":
+                continue  # 机器人消息与系统通知不计入成员日报（避免"未映射"噪音）
             content = json.loads(item.get("body", {}).get("content", "{}"))
             text = content.get("text", "")
             mentions = [m for m in _MENTION_RE.findall(text) if not m.startswith("所有人")]
@@ -182,7 +185,7 @@ class FeishuMessageCollector(_FeishuBase):
                     source=self.name,
                     event_type="message",
                     ref=item.get("message_id", ""),
-                    author=(item.get("sender") or {}).get("id", ""),
+                    author=sender.get("id", ""),
                     occurred_at=_parse_ms(item.get("create_time")),
                     title=text[:80] or "(非文本消息)",
                     url=f"https://feishu.cn/msg/{item.get('message_id', '')}",
@@ -204,6 +207,8 @@ def _parse_ms(value) -> datetime:
         return datetime.now().astimezone()
     if isinstance(value, (int, float)):
         return datetime.fromtimestamp(value / 1000, tz=UTC)
+    if isinstance(value, str) and value.isdigit():
+        return datetime.fromtimestamp(int(value) / 1000, tz=UTC)  # 毫秒时间戳字符串
     if isinstance(value, str):
         try:
             return datetime.fromisoformat(value.replace("Z", "+00:00"))

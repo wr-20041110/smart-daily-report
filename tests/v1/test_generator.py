@@ -9,10 +9,12 @@ from daily_report_v1.models import UNMAPPED_NAME, Member, RawEvent
 
 DAY = date(2026, 11, 24)
 MEMBERS = [
-    Member("王然", "wr-20041110", "ou_wr-20041110", "a@x.com"),
-    Member("咸哲", "xz0622", "ou_xz0622", "b@x.com"),
-    Member("王峻羽", "wjy-jjj", "ou_wjy-jjj", "c@x.com"),
-    Member("尹博弘", "Yin-bo-hong", "ou_yinbohong", "20233159@stu.ccut.edu.cn"),
+    Member("王然", "wr-20041110", "ou_9fb641793dcb3547d8d1c4e655b7e589", "a@x.com"),
+    Member("咸哲", "xz0622", "ou_1285ac40fd873adf31e91d930be504b3", "b@x.com"),
+    Member("王峻羽", "wjy-jjj", "ou_5e774c1fe692bb17cd0d4f7a0dd93076", "c@x.com"),
+    Member(
+        "尹博弘", "Yin-bo-hong", "ou_234449d3b4e94f58f064f33dbd2736c0", "20233159@stu.ccut.edu.cn"
+    ),
 ]
 
 
@@ -41,7 +43,10 @@ def test_plain_commit_goes_to_dev():
 
 def test_plain_message_goes_to_discuss():
     e = ev(
-        source="feishu_message", event_type="message", author="ou_xz0622", title="大家看下文档"
+        source="feishu_message",
+        event_type="message",
+        author="ou_1285ac40fd873adf31e91d930be504b3",
+        title="大家看下文档",
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert len(entries_of(entries, "咸哲", "discuss")) == 1
@@ -60,8 +65,8 @@ def test_r2_task_with_collaborators():
     e = ev(
         source="feishu_task",
         event_type="task",
-        author="ou_wr-20041110",
-        collaborators=["ou_wjy-jjj"],
+        author="ou_9fb641793dcb3547d8d1c4e655b7e589",
+        collaborators=["ou_5e774c1fe692bb17cd0d4f7a0dd93076"],
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert {n for en in entries if en.category == "collab" for n in [en.member_name]} >= {
@@ -75,10 +80,10 @@ def test_r3_mention_with_task_id():
         source="feishu_message",
         event_type="message",
         ref="m1",
-        author="ou_wr-20041110",
+        author="ou_9fb641793dcb3547d8d1c4e655b7e589",
         title="@咸哲 T-101 帮看下接口",
-        collaborators=["ou_xz0622"],
-        payload={"task_id": "T-101", "mentions": ["ou_xz0622"]},
+        collaborators=["ou_1285ac40fd873adf31e91d930be504b3"],
+        payload={"task_id": "T-101", "mentions": ["ou_1285ac40fd873adf31e91d930be504b3"]},
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     # 发言者同时有 discuss 与 collab（R3）
@@ -92,10 +97,10 @@ def test_mention_without_task_id_is_not_collab():
         source="feishu_message",
         event_type="message",
         ref="m2",
-        author="ou_wr-20041110",
+        author="ou_9fb641793dcb3547d8d1c4e655b7e589",
         title="@咸哲 在吗",
-        collaborators=["ou_xz0622"],
-        payload={"mentions": ["ou_xz0622"], "task_id": None},
+        collaborators=["ou_1285ac40fd873adf31e91d930be504b3"],
+        payload={"mentions": ["ou_1285ac40fd873adf31e91d930be504b3"], "task_id": None},
     )
     entries = generate_member_reports([e], MEMBERS, DAY)
     assert not entries_of(entries, "咸哲", "collab")
@@ -126,7 +131,7 @@ def test_team_report_ordering_and_markdown():
             ev(
                 source="feishu_message",
                 event_type="message",
-                author="ou_wr-20041110",
+                author="ou_9fb641793dcb3547d8d1c4e655b7e589",
                 ref="m9",
                 title="讨论",
             ),

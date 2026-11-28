@@ -133,7 +133,7 @@ def test_github_retry_exhausted(monkeypatch):
 # ---- 飞书 ----
 
 
-def _task(guid="g1", assignee="ou_wr-20041110", collabs=(), summary="任务A"):
+def _task(guid="g1", assignee="ou_9fb641793dcb3547d8d1c4e655b7e589", collabs=(), summary="任务A"):
     return {
         "guid": guid,
         "assignee": assignee,
@@ -149,10 +149,12 @@ def test_feishu_requires_credentials():
 
 
 def test_feishu_task_mapping():
-    client = FakeClient([{"code": 0, "data": {"items": [_task(collabs=("ou_xz0622",))]}}])
+    client = FakeClient(
+        [{"code": 0, "data": {"items": [_task(collabs=("ou_1285ac40fd873adf31e91d930be504b3",))]}}]
+    )
     events = fetch_feishu_task(DAY, feishu_settings(), session=client)
-    assert events[0].author == "ou_wr-20041110"
-    assert events[0].collaborators == ("ou_xz0622",)
+    assert events[0].author == "ou_9fb641793dcb3547d8d1c4e655b7e589"
+    assert events[0].collaborators == ("ou_1285ac40fd873adf31e91d930be504b3",)
     assert events[0].ref == "g1"
     assert client.calls[0]["json"] == {"app_id": "id", "app_secret": "sec"}
 
@@ -160,7 +162,7 @@ def test_feishu_task_mapping():
 def test_feishu_message_parsing():
     item = {
         "message_id": "m1",
-        "sender": {"id": "ou_wr-20041110"},
+        "sender": {"id": "ou_9fb641793dcb3547d8d1c4e655b7e589", "sender_type": "user"},
         "create_time": "1764550400000",
         "body": {"content": '{"text": "@咸哲 T-201 骨架帮我评审"}'},
     }
@@ -182,7 +184,7 @@ def test_attendance_mapping():
         "data": {
             "user_stats": [
                 {
-                    "user_id": "ou_wr-20041110",
+                    "user_id": "ou_9fb641793dcb3547d8d1c4e655b7e589",
                     "records": [{"check_type": "am_in", "check_time": "1764550920000"}],
                 },
                 {
@@ -204,9 +206,33 @@ def test_tenant_token_cached(monkeypatch):
     import daily_report_v2.fetch as mod
 
     monkeypatch.setitem(mod._TOKEN_CACHE, "cached-app", ("t-cached", mod.time.monotonic()))
-    s = Settings(
-        members=tuple(MEMBERS), feishu_app_id="cached-app", feishu_app_secret="sec"
-    )
+    s = Settings(members=tuple(MEMBERS), feishu_app_id="cached-app", feishu_app_secret="sec")
     client = FakeClient([[]])
     assert mod._tenant_token(s, client) == "t-cached"
     assert client.calls == []  # 命中缓存，零 HTTP 请求
+
+
+def test_feishu_message_skips_non_user_sender():
+    """机器人/系统消息不计入成员日报（避免未映射噪音）。"""
+    item = {
+        "message_id": "m2",
+        "sender": {"id": "cli_app", "sender_type": "app"},
+        "create_time": "1764550400000",
+        "body": {"content": '{"text": "机器人消息"}'},
+    }
+    client = FakeClient([{"code": 0, "data": {"items": [item]}}])
+    events = fetch_feishu_message(DAY, feishu_settings(), session=client)
+    assert events == []
+
+
+def test_feishu_message_numeric_string_timestamp():
+    """毫秒时间戳字符串按 UTC 正确解析（真实 API 返回格式）。"""
+    item = {
+        "message_id": "m3",
+        "sender": {"id": "ou_9fb641793dcb3547d8d1c4e655b7e589", "sender_type": "user"},
+        "create_time": "1764550400000",
+        "body": {"content": '{"text": "你好"}'},
+    }
+    client = FakeClient([{"code": 0, "data": {"items": [item]}}])
+    events = fetch_feishu_message(DAY, feishu_settings(), session=client)
+    assert events[0].occurred_at.hour == 0  # 1764550400000 = 2025-12-01T00:53:20Z

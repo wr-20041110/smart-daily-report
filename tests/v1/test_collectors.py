@@ -122,9 +122,9 @@ def test_github_date_window_and_filter():
 def test_github_coauthor_parsing():
     msg = "fix: 归属去重\n\nCo-authored-by: xz0622 <xz0622@example.com>"
     client = FakeClient([[_commit(message=msg)]])
-    events = GitHubCollector(
-        "team/repo", "tok", ["wr-20041110", "xz0622"], session=client
-    ).collect(DAY)
+    events = GitHubCollector("team/repo", "tok", ["wr-20041110", "xz0622"], session=client).collect(
+        DAY
+    )
     assert events[0].collaborators == ["xz0622"]
     assert events[0].payload["co_authored"] is True
 
@@ -175,7 +175,9 @@ class FakeFeishuClient(FakeClient):
         return FakeResponse({"code": 0, "tenant_access_token": "t-token"})
 
 
-def _task_item(guid="g1", assignee="ou_wr-20041110", collabs=None, summary="任务A"):
+def _task_item(
+    guid="g1", assignee="ou_9fb641793dcb3547d8d1c4e655b7e589", collabs=None, summary="任务A"
+):
     return {
         "guid": guid,
         "assignee": assignee,
@@ -186,22 +188,34 @@ def _task_item(guid="g1", assignee="ou_wr-20041110", collabs=None, summary="任�
 
 
 def test_feishu_task_requires_credentials():
-    collector = FeishuTaskCollector(None, None, ["ou_wr-20041110"], session=FakeClient([[]]))
+    collector = FeishuTaskCollector(
+        None, None, ["ou_9fb641793dcb3547d8d1c4e655b7e589"], session=FakeClient([[]])
+    )
     with pytest.raises(CredentialsMissingError):
         collector.collect(DAY)
 
 
 def test_feishu_task_mapping():
     client = FakeFeishuClient(
-        [{"code": 0, "data": {"items": [_task_item(collabs=["ou_xz0622"])]}}]
+        [
+            {
+                "code": 0,
+                "data": {"items": [_task_item(collabs=["ou_1285ac40fd873adf31e91d930be504b3"])]},
+            }
+        ]
     )
     collector = FeishuTaskCollector(
-        "id", "sec", ["ou_wr-20041110", "ou_xz0622"], session=client
+        "id",
+        "sec",
+        ["ou_9fb641793dcb3547d8d1c4e655b7e589", "ou_1285ac40fd873adf31e91d930be504b3"],
+        session=client,
     )
     events = collector.collect(DAY)
     assert len(events) == 1
-    assert events[0].author == "ou_wr-20041110"  # 经办人→author
-    assert events[0].collaborators == ["ou_xz0622"]  # 协作人→collaborators
+    assert events[0].author == "ou_9fb641793dcb3547d8d1c4e655b7e589"  # 经办人→author
+    assert events[0].collaborators == [
+        "ou_1285ac40fd873adf31e91d930be504b3"
+    ]  # 协作人→collaborators
     assert events[0].ref == "g1"
     assert client.calls[0]["json"] == {"app_id": "id", "app_secret": "sec"}
 
@@ -210,7 +224,7 @@ def test_feishu_message_mention_parsing():
     content = '{"text": "@咸哲 T-101 的接口契约帮我看看"}'
     item = {
         "message_id": "m1",
-        "sender": {"id": "ou_wr-20041110"},
+        "sender": {"id": "ou_9fb641793dcb3547d8d1c4e655b7e589", "sender_type": "user"},
         "create_time": "1764518400000",
         "body": {"content": content},
     }
@@ -237,3 +251,29 @@ def test_tenant_token_cached(monkeypatch):
     collector.collect(DAY)  # _tenant_token 命中缓存，仅任务列表一个请求
     assert len(client.calls) == 1
     assert client.calls[0]["url"].startswith("/open-apis/task")
+
+
+def test_feishu_message_skips_non_user_sender():
+    """机器人/系统消息不计入成员日报（避免未映射噪音）。"""
+    item = {
+        "message_id": "m2",
+        "sender": {"id": "cli_app", "sender_type": "app"},
+        "create_time": "1764550400000",
+        "body": {"content": '{"text": "机器人消息"}'},
+    }
+    client = FakeFeishuClient([{"code": 0, "data": {"items": [item]}}])
+    events = FeishuMessageCollector("id", "sec", "oc_group", session=client).collect(DAY)
+    assert events == []
+
+
+def test_feishu_message_numeric_string_timestamp():
+    """毫秒时间戳字符串按 UTC 正确解析（真实 API 返回格式）。"""
+    item = {
+        "message_id": "m3",
+        "sender": {"id": "ou_9fb641793dcb3547d8d1c4e655b7e589", "sender_type": "user"},
+        "create_time": "1764550400000",
+        "body": {"content": '{"text": "你好"}'},
+    }
+    client = FakeFeishuClient([{"code": 0, "data": {"items": [item]}}])
+    events = FeishuMessageCollector("id", "sec", "oc_group", session=client).collect(DAY)
+    assert events[0].occurred_at.hour == 0  # 毫秒字符串解析为 UTC
