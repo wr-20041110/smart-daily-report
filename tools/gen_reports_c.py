@@ -51,7 +51,8 @@ def build_system_design() -> str:
     r.h1("第4章 任务分解")
     r.p("任务清单见 specs/tasks-v2.md：初始 11 项（T201–T211）+ 变更单 3 项（T212–T214），"
         "每条任务含编号/交付物/验收标准/依赖/预估；一次提交对应一个任务（提交历史可查）。")
-    r.fig("任务依赖图", "tasks-v2.md 第 3 节（T201→T202→T203 与并行组 {T204,T205,T206}）")
+    r.fig("任务依赖图", "PlantUML 工具绘制，源文件 specs/uml/tasksdep.puml",
+          png=str(OUT / "figures" / "tasksdep.png"))
     r.table("任务分解摘要", T("任务", "交付物", "验收要点"),
             [T("T201-T202", "骨架/领域模型/配置", "CLI 可执行；frozen 数据类；纯函数构建"),
              T("T203", "存储层", "幂等建表/去重/按日期查询"),

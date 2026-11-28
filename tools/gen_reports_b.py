@@ -102,7 +102,8 @@ def build_system_analysis() -> str:
     r.p("按课程要求构建“采集层 → 生成层 → 推送层 → 主编排入口”四层，外加共享基础层"
         "（模型/配置/存储/异常）。数据流：采集层产出 RawEvent → 生成层产出 DailyReportEntry 与 "
         "TeamReport → 存储层落库 → 推送层发送；任何一层失败不影响已完成环节（降级出报）。")
-    r.fig("系统分层架构图", "design.md 第 1 章文字图；类图见 specs/uml/class.puml")
+    r.fig("系统分层架构图", "PlantUML 工具绘制，源文件 specs/uml/architecture.puml",
+          png=str(OUT / "figures" / "architecture.png"))
     r.h2("2.2 模块职责")
     r.table("模块职责（v1/v2 对照）", T("模块", "v1（类）", "v2（函数）", "职责"),
             [T("采集-GitHub", "GitHubCollector", "fetch_github", "当日提交归一化"),

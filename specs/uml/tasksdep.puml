@@ -1,0 +1,37 @@
+@startuml tasksdep
+' 智能日报生成器 v2 任务依赖图（tasks-v2.md 第 3 节）
+skinparam defaultFontName "Microsoft YaHei"
+skinparam componentStyle rectangle
+
+component "T201 骨架与门禁" as T201
+component "T202 领域模型" as T202
+component "T203 存储层" as T203
+component "T204 GitHub 采集" as T204
+component "T205 飞书任务采集" as T205
+component "T206 飞书消息采集" as T206
+component "T207 规则引擎" as T207
+component "T208 编排" as T208
+component "T209 推送" as T209
+component "T210 管道与 CLI" as T210
+component "T211 回归门禁" as T211
+component "T212 规范同步" as T212
+component "T213 考勤采集" as T213
+component "T214 全量回归" as T214
+
+T201 -down-> T202
+T202 -down-> T203
+T202 -down-> T204
+T202 -down-> T205
+T202 -down-> T206
+T204 -down-> T207
+T205 -down-> T207
+T206 -down-> T207
+T207 -down-> T208
+T208 -down-> T209
+T203 -down-> T210
+T209 -down-> T210
+T210 -down-> T211
+T211 -down-> T212
+T212 -down-> T213
+T213 -down-> T214
+@enduml
