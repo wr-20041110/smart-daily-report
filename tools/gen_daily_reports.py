@@ -44,7 +44,9 @@ def main() -> int:
             settings = load_v2(mock=True)
             result = run_v2(day, settings, push=False)
             tag = "v2-Superpowers"
-        print(f"{day.isoformat()} [{tag}] 条目 {result.entry_count} 条，耗时 {result.elapsed_seconds}s")
+        print(
+            f"{day.isoformat()} [{tag}] 条目 {result.entry_count} 条，耗时 {result.elapsed_seconds}s"
+        )
         total += 1
     print(f"共生成 {total} 份团队日报（历史已留存 SQLite：data/reports.db）")
     return 0
