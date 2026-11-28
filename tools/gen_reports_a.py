@@ -81,7 +81,11 @@ def build_business_survey() -> str:
         "飞书客户端工作台实测截图，归档于 docs/records/调研截图/",
         png=str(OUT.parent / "records" / "调研截图" / "c-飞书多维表格.png"),
     )
-    r.p("方案 A（项目管理工具周报）截图待补充（禅道演示环境 demo.zentao.net 最快）。")
+    r.fig(
+        "Teambition 周报管理调研截图（方案 A）",
+        "Teambition 客户端实测截图，归档于 docs/records/调研截图/",
+        png=str(OUT.parent / "records" / "调研截图" / "a-teambition周报管理.png"),
+    )
 
     r.h1("第4章 调研结论分析")
     r.h2("4.1 易用性对比")
