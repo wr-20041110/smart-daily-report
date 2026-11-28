@@ -37,7 +37,6 @@ def format_one(path: Path) -> None:
         # 首次处理：在第一章前段落插入分节符（干净副本，不含页脚）
         import copy
 
-        from docx.oxml import OxmlElement
 
         sect_pr = copy.deepcopy(body.sectPr)
         prev_p.get_or_add_pPr().append(sect_pr)
