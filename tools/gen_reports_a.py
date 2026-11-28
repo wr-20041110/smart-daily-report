@@ -131,7 +131,8 @@ def build_requirements() -> str:
     r.p("核心业务流程为：团队成员当日工作（提交代码、流转任务、群内讨论）→ 外部平台留存痕迹 → "
         "采集层三源拉取并归一化为 RawEvent → 生成层按协同归属规则聚合为个人条目 → 编排团队日报 → "
         "SQLite 落库 → 邮件与飞书推送 → 组长接收审阅。")
-    r.fig("业务流程图（泳道图）", "PlantUML 工具绘制，源文件 specs/uml/swimlane.puml")
+    r.fig("业务流程图（泳道图）", "PlantUML 工具绘制，源文件 specs/uml/swimlane.puml",
+          png=str(OUT / "figures" / "swimlane.png"))
     r.p("异常流程：任一数据源失败 → 重试 3 次指数退避 → 仍失败则记入缺失源并降级出报，"
         "日报头部显式标注“无数据”；凭证缺失 → 全流程自动进入 mock 模式并显式标注。")
 
@@ -143,7 +144,8 @@ def build_requirements() -> str:
              T("配置管理员", "系统运维者", "凭证安全、可追溯"),
              T("教师/企业导师", "评审者", "规范可验证、演示可运行")])
     r.h2("3.2 用例图与用例模板")
-    r.fig("用例图", "PlantUML 工具绘制，源文件 specs/uml/usecase.puml")
+    r.fig("用例图", "PlantUML 工具绘制，源文件 specs/uml/usecase.puml",
+          png=str(OUT / "figures" / "usecase.png"))
     r.h3("用例模板（节选 UC1/UC5/UC12）")
     r.table("UC1 采集 GitHub 提交", T("项", "内容"),
             [T("参与者", "定时/手动触发（主编排）"), T("前置", "GITHUB_TOKEN 已注入；仓库地址已配置"),

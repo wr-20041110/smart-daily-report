@@ -1,10 +1,11 @@
 @startuml usecase
+skinparam defaultFontName \"Microsoft YaHei\"
 ' 智能日报生成器 用例图（阶段一 v1）
 left to right direction
 skinparam actorStyle awesome
 skinparam packageStyle rectangle
 
-actor "团队成员\n(王然/咸哲/王峻羽)" as Member
+actor "团队成员\n(王然/咸哲/王峻羽/尹博弘)" as Member
 actor "组长" as Leader
 actor "配置管理员" as Admin
 

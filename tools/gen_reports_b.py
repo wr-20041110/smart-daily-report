@@ -117,18 +117,21 @@ def build_system_analysis() -> str:
         "两阶段对比分析见项目总结报告第 2 章。")
 
     r.h1("第3章 对象与类建模")
-    r.fig("类图（v1）", "PlantUML 工具绘制，源文件 specs/uml/class.puml")
+    r.fig("类图（v1）", "PlantUML 工具绘制，源文件 specs/uml/class.puml",
+          png=str(OUT / "figures" / "class.png"))
     r.p("核心类：Member（成员与平台账号映射）、RawEvent（采集层统一事件格式）、DailyReportEntry"
         "（个人条目，携带 raw_refs 可追溯）、TeamReport（团队日报）、Settings（配置与凭证）、"
         "BaseCollector/BasePusher（契约基类，v1）、PipelineResult（全流程汇总）。")
     r.h2("3.1 关键序列")
-    r.fig("主编排时序图", "PlantUML 工具绘制，源文件 specs/uml/sequence.puml")
+    r.fig("主编排时序图", "PlantUML 工具绘制，源文件 specs/uml/sequence.puml",
+          png=str(OUT / "figures" / "sequence.png"))
     r.p("主编排时序：配置管理员启动 CLI → Orchestrator 加载 Settings → 逐源 collect（凭证齐全走真实接口，"
         "否则 mock）→ 生成层聚合与归属 → 编排团队日报 → SQLite 落库（幂等）→ 逐通道推送 → "
         "输出 PipelineResult。生成/存储失败时退出码 1 且不推送。")
 
     r.h1("第4章 数据结构设计")
-    r.fig("ER 图", "PlantUML 工具绘制，源文件 specs/uml/er.puml")
+    r.fig("ER 图", "PlantUML 工具绘制，源文件 specs/uml/er.puml",
+          png=str(OUT / "figures" / "er.png"))
     r.h2("4.1 SQLite 表结构")
     r.table("raw_events（原始事件）", T("字段", "类型", "说明"),
             [T("source/event_type/ref", "TEXT", "来源/类型/源内唯一引用"), T("author", "TEXT", "发起人平台账号"),

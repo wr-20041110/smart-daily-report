@@ -9,6 +9,8 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
 from docx import Document
 from docx.enum.section import WD_ORIENT
 from docx.enum.table import WD_TABLE_ALIGNMENT
@@ -163,17 +165,22 @@ class Report:
                         r.font.size = Pt(10.5)
         self.doc.add_paragraph()
 
-    def fig(self, caption: str, source_note: str) -> None:
-        """图占位：标题 + 来源说明（UML 图为 PlantUML 工具绘制，源文件在 specs/uml/）。"""
+    def fig(self, caption: str, source_note: str, png: str | None = None) -> None:
+        """图：标题 + 图片（提供 png 路径时嵌入）+ 来源说明。"""
         self._fig_no += 1
         cap = self.doc.add_paragraph()
         cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
         run = cap.add_run(f"图{self._fig_no} {caption}")
         run.font.bold = True
         run.font.size = Pt(10.5)
+        if png and Path(png).exists():
+            img_p = self.doc.add_paragraph()
+            img_p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            img_p.add_run().add_picture(png, width=Cm(14))
         note = self.doc.add_paragraph()
         note.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        nr = note.add_run(f"（{source_note}；渲染图片请用 PlantUML 导出后替换本占位）")
+        suffix = "" if (png and Path(png).exists()) else "；渲染图片请用 PlantUML 导出后替换本占位"
+        nr = note.add_run(f"（{source_note}{suffix}）")
         nr.font.size = Pt(9)
         nr.font.italic = True
         self.doc.add_paragraph()

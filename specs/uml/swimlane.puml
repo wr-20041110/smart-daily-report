@@ -1,4 +1,5 @@
 @startuml swimlane
+skinparam defaultFontName \"Microsoft YaHei\"
 ' 智能日报生成器 业务流程图（泳道图）v1
 |团队成员|
 start
